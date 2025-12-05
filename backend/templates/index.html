@@ -26,8 +26,19 @@
   }
 
   /* Logo */
-  .top-left-logo{position:fixed;top:20px;left:20px;z-index:2000}
-  .top-left-logo img{width:140px;border-radius:12px;filter:drop-shadow(0 0 10px rgba(255,255,255,0.7))}
+ .top-left-logo {
+  position: fixed;
+  top: 28px;        /* More natural vertical spacing */
+  left: 28px;       /* Slightly more inside */
+  z-index: 2000;
+}
+
+.top-left-logo img {
+  width: 150px;     /* Slightly larger for visibility */
+  border-radius: 12px;
+  filter: drop-shadow(0 0 10px rgba(255,255,255,0.7));
+}
+
 
   /* Hero */
   .hero{height:70vh;display:flex;align-items:center;justify-content:center;text-align:center;padding-top:40px}
@@ -312,6 +323,16 @@
 .preview-buttons .action-btn {
   width: 180px;        /* same width for both */
   text-align: center; 
+}
+@media (max-width: 480px) {
+  .top-left-logo {
+    top: 12px;
+    left: 12px;
+  }
+
+  .top-left-logo img {
+    width: 120px;   /* Keeps logo proportional on small screens */
+  }
 }
 
   </style>
@@ -911,11 +932,16 @@
       `Hotel: ${formValues.hotel_category || "Not specified"}`,
       `Travel Group: ${formValues.travel_group || "Not specified"}`
     ];
-    const html = `<b>Preview your enquiry</b><br><br>${lines.join("<br>")}<br><br>
-      <div class="preview-buttons">
-  <button class="action-btn" id="open-modal-from-chat">Open Enquiry Form</button>
-  <button class="action-btn" id="send-wa-chat" style="background:#25D366;color:#003;">Send WhatsApp</button>
-</div>
+ const html = `
+  <b>Preview your enquiry</b><br><br>
+  ${lines.join("<br>")}<br><br>
+
+  <div class="preview-buttons">
+      <button class="action-btn" id="open-modal-from-chat">Open Enquiry Form</button>
+      <button class="action-btn" id="send-wa-chat" style="background:#25D366;color:#003;">Send WhatsApp</button>
+  </div>
+`;
+
 
     const wrap = document.createElement("div");
     wrap.className="msg bot";
