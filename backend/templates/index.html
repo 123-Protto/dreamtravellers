@@ -300,16 +300,6 @@
     bottom: 15px;
   }
 }
-/* Fix alignment of the two preview buttons */
-.preview-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 12px;
-  align-items: center; 
-}
-
-
   </style>
 </head>
 <body>
@@ -908,11 +898,8 @@
       `Travel Group: ${formValues.travel_group || "Not specified"}`
     ];
     const html = `<b>Preview your enquiry</b><br><br>${lines.join("<br>")}<br><br>
-    <div class="preview-buttons">
-  <button class="action-btn" id="open-modal-from-chat">Open Enquiry Form</button>
-  <button class="action-btn" id="send-wa-chat" style="background:#25D366;color:#003;">Send WhatsApp</button>
-</div>
-
+      <button class="action-btn" id="open-modal-from-chat">Open Enquiry Form</button>
+      <button class="action-btn" id="send-wa-chat" style="background:#25D366;color:#003;margin-left:8px">Send WhatsApp</button>`;
     const wrap = document.createElement("div");
     wrap.className="msg bot";
     wrap.innerHTML = `<div class="bubble">${html}</div>`;
