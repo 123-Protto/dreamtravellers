@@ -1,0 +1,964 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dream Travellers</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+  :root{
+    --accent1:#00eaff;
+    --accent2:#00ffbf;
+    --glass-bg: rgba(255,255,255,0.12);
+    --glass-strong: rgba(255,255,255,0.18);
+    --muted: rgba(255,255,255,0.8);
+    --card-radius: 14px;
+  }
+
+  html,body{
+    margin:0; height:100%; font-family:'Poppins',sans-serif;
+    background:linear-gradient(rgba(0,0,0,0.65),rgba(0,0,0,0.65)),url("{% static 'images/bgp.jpg' %}") center/cover no-repeat fixed;
+    color:#fff;
+  }
+
+  /* Logo */
+  .top-left-logo{position:fixed;top:20px;left:20px;z-index:2000}
+  .top-left-logo img{width:140px;border-radius:12px;filter:drop-shadow(0 0 10px rgba(255,255,255,0.7))}
+
+  /* Hero */
+  .hero{height:70vh;display:flex;align-items:center;justify-content:center;text-align:center;padding-top:40px}
+  .hero-content h1{margin:0;font-size:clamp(36px,6vw,64px);font-weight:700;text-transform:uppercase;background:linear-gradient(90deg,var(--accent1),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .tagline{margin-top:14px;font-size:18px;opacity:0.95}
+
+  /* Cards */
+  .card-row{width:100%;display:flex;justify-content:center;gap:34px;flex-wrap:wrap;margin-top:10px;margin-bottom:100px;padding:20px}
+  .card{width:340px;background:rgba(255,255,255,0.14);backdrop-filter:blur(8px);border-radius:18px;padding:18px;border:1px solid rgba(255,255,255,0.08);transition:0.28s;display:flex;flex-direction:column}
+  .card:hover{transform:translateY(-6px) scale(1.02);background:rgba(255,255,255,0.18)}
+  .title{position:relative;margin-bottom:12px;font-size:18px;font-weight:600}
+  .title::after{content:'';position:absolute;left:0;bottom:-8px;height:3px;width:0;background:linear-gradient(90deg,var(--accent1),var(--accent2));border-radius:4px;transition:width .35s}
+  .card:hover .title::after{width:100%}
+
+  /* Carousel */
+  .carousel{border-radius:12px;overflow:hidden;position:relative;display:flex;flex-direction:column; background: rgba(0,0,0,0.06);}
+  .carousel-track{display:flex;transition:transform .6s ease;scroll-behavior:smooth;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .slide{min-width:100%;padding:18px 14px 110px 14px;box-sizing:border-box;position:relative;scroll-snap-align:center}
+  .img-wrap{ width:100%; overflow:hidden; border-radius:10px; }
+  .slide img{width:100%;height:180px;object-fit:cover;border-radius:10px;box-shadow:0 8px 18px rgba(0,0,0,0.32)}
+  .slide-content{margin-top:10px}
+  .slide h3{margin:6px 0;font-size:16px}
+  .slide p{margin:0;font-size:13px;color:rgba(255,255,255,0.92)}
+  .carousel-dots{display:flex;justify-content:center;gap:8px;margin-top:10px;padding-bottom:6px}
+  .carousel-dots span{width:10px;height:10px;background:rgba(255,255,255,0.35);border-radius:50%;cursor:pointer;transition:.22s}
+  .carousel-dots .active{background:var(--accent2);transform:scale(1.2);box-shadow:0 0 8px var(--accent2)}
+
+  /* Enquire Button on Slides */
+  .enquire-btn{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);width:86%;padding:12px 14px;background:linear-gradient(135deg,var(--accent1),var(--accent2));border:none;border-radius:12px;color:#003;cursor:pointer;font-weight:700;text-align:center;box-shadow:0 6px 18px rgba(0,0,0,0.35)}
+  .enquire-btn:hover{transform:translateX(-50%) scale(1.03)}
+
+  /* Chatbot */
+  #web-chatbot-toggle{position:fixed;right:28px;bottom:28px;width:66px;height:66px;border-radius:50%;background:linear-gradient(135deg,var(--accent2),var(--accent1));display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer;z-index:5000;box-shadow:0 10px 30px rgba(0,0,0,0.4)}
+  #web-chatbot{position:fixed;right:18px;bottom:110px;width:420px;height:560px;border-radius:16px;background:rgba(18,18,18,0.92);border:1px solid rgba(255,255,255,0.06);backdrop-filter:blur(10px);display:none;flex-direction:column;overflow:hidden;z-index:5000}
+  #web-chatbot-header{padding:12px 14px;background:linear-gradient(135deg, rgba(0,200,255,0.12), rgba(0,140,255,0.10));font-weight:600;display:flex;justify-content:space-between;align-items:center;color:#fff}
+  #web-chatbot-messages{flex:1;padding:12px;overflow:auto;font-size:14px;background:linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.01))}
+  .msg{margin:8px 0;display:block}
+  .msg.you{text-align:right}
+  .msg .bubble{display:inline-block;padding:8px 12px;border-radius:14px;max-width:85%}
+  .msg.you .bubble{background:linear-gradient(135deg,var(--accent2),var(--accent1));color:#003}
+  .msg.bot .bubble{background:rgba(255,255,255,0.06);color:#fff}
+  #typing-indicator{font-size:13px;opacity:0.85;margin:6px 12px;display:none;color:rgba(255,255,255,0.85)}
+  #chat-input-area{padding:12px;display:flex;gap:10px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))}
+  #chat-step-input{flex:1;padding:10px;border-radius:10px;border:none;background:#fff}
+  #chat-step-send{padding:10px 14px;border-radius:10px;border:none;background:linear-gradient(135deg,var(--accent1),var(--accent2));cursor:pointer;color:#003;font-weight:700}
+  .inline-form select,.inline-form input{width:100%;padding:8px;border-radius:8px;border:none;font-size:14px}
+  .action-btn{padding:8px 10px;border-radius:8px;border:none;cursor:pointer;background:var(--accent1);color:#003;font-weight:700}
+
+  /* Modal & Form - Travel Theme (D) */
+  .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);backdrop-filter:blur(4px);display:none;justify-content:center;align-items:center;z-index:9999}
+  .modal-box{width:94%;max-width:920px;max-height:90vh;overflow:hidden;background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));border-radius:18px;padding:0;border:1px solid rgba(255,255,255,0.08);display:flex;align-items:stretch}
+  .modal-left, .modal-right{padding:22px;overflow:auto}
+  .modal-left{flex:1 1 60%;border-right:1px solid rgba(255,255,255,0.04)}
+  .modal-right{width:320px;background:rgba(0,0,0,0.04);flex:0 0 320px;border-left:1px solid rgba(255,255,255,0.03)}
+
+  .form-section{margin-bottom:18px;background:transparent}
+  .form-section h3{margin:0 0 10px 0;font-size:16px;color:var(--muted)}
+  .field-row{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+  .field{flex:1;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.95);padding:10px;border-radius:10px;color:#000}
+  .field i{width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;border-radius:6px;background:#f5f5f5;color:#444;font-size:14px}
+  .field input[type="text"], .field input[type="tel"], .field input[type="email"], .field input[type="date"], .field input[type="number"], .field select, .field textarea{
+    border:none;background:transparent;outline:none;font-size:14px;color:#000;width:100%;
+  }
+  .field textarea{resize:vertical}
+
+  .summary-title{font-weight:700;margin-bottom:8px}
+  .summary-card{background:rgba(255,255,255,0.06);padding:12px;border-radius:10px;color:#fff;border:1px solid rgba(255,255,255,0.04)}
+  .summary-row{display:flex;justify-content:space-between;margin-bottom:8px;font-size:14px}
+  .summary-package{font-weight:700;margin-bottom:10px}
+
+  .modal-actions{display:flex;gap:10px;margin-top:8px}
+  .btn-primary{flex:1;padding:12px;border-radius:10px;border:none;background:linear-gradient(135deg,var(--accent1),var(--accent2));color:#003;font-weight:700;cursor:pointer}
+  .btn-secondary{flex:1;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);background:transparent;color:#fff;cursor:pointer}
+
+  /* Footer */
+  .footer{width:100%;background:rgba(255,255,255,0.06);backdrop-filter:blur(10px);margin-top:60px;padding:40px 20px;text-align:center;color:#fff}
+  .footer-content h2{font-size:28px;font-weight:600;margin-bottom:6px}
+  .footer-social{margin:18px 0;display:flex;justify-content:center;gap:20px}
+  .footer-social a{font-size:26px;color:#fff;transition:0.3s}
+  .footer-copy{margin-top:20px;opacity:0.7;font-size:14px}
+  .reviews-box{margin:30px auto;max-width:600px}
+  .reviews-slider{display:flex;overflow-x:auto;gap:16px;scroll-snap-type:x mandatory;padding:10px}
+  .review-card{min-width:260px;background:rgba(255,255,255,0.12);padding:18px;border-radius:14px;scroll-snap-align:start;backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.15)}
+
+  @media(max-width:900px){
+    .modal-box{flex-direction:column;margin:16px}
+    .modal-right{width:auto;border-left:none;border-top:1px solid rgba(255,255,255,0.04)}
+    .modal-left{border-right:none}
+    .card{width:92%}
+  }
+  </style>
+</head>
+<body>
+  <div class="top-left-logo">
+    <img src="{% static 'images/logo.png' %}" alt="Dream Travellers Logo">
+  </div>
+
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Explore The World</h1>
+      <div class="tagline">Discover unforgettable journeys crafted just for you</div>
+    </div>
+  </section>
+
+  <section class="card-row">
+    <div class="card">
+      <h2 class="title"><i class="fa-solid fa-building"></i> About Us</h2>
+      <p>We are group of Travel Enthusiast providing customisable travel package for God's Own Country (Kerala).
+      Your travel will be curated as per your needs. We operate from Kannur, Surat, Coimbatore and Pune. Let us make your travel dreams come true!
+      </p>
+    </div>
+
+    <div class="card">
+      <h2 class="title"><i class="fa-solid fa-suitcase-rolling"></i> Packages</h2>
+
+      <div class="carousel" aria-hidden="false">
+        <div class="carousel-track">
+
+          <!-- Slide 1 -->
+          <div class="slide">
+            <div class="img-wrap"><img src="{% static 'images/pack1.jpg' %}" alt="Pack 1"></div>
+            <div class="slide-content">
+              <h3>Kochi – Athirappilly – Munnar – Thekkady – Alleppey – Kochi</h3>
+              <p>5N/6D • Forest • Hill Station • Backwaters • Water Sports</p>
+            </div>
+            <button class="enquire-btn" onclick="openEnquiry('Kochi – Athirappilly – Munnar – Thekkady – Alleppey – Kochi')">Enquire Now</button>
+          </div>
+
+          <!-- Slide 2 -->
+          <div class="slide">
+            <div class="img-wrap"><img src="{% static 'images/pack2.jpg' %}" alt="Pack 2"></div>
+            <div class="slide-content">
+              <h3>Kochi – Munnar – Thekkady – Alleppey – Kovalam – Kanyakumari – Trivandrum</h3>
+              <p>8N/9D • Beaches • Monuments • Culture</p>
+            </div>
+            <button class="enquire-btn" onclick="openEnquiry('Kochi – Munnar – Thekkady – Alleppey – Kovalam – Kanyakumari – Trivandrum')">Enquire Now</button>
+          </div>
+
+          <!-- Slide 3 -->
+          <div class="slide">
+            <div class="img-wrap"><img src="{% static 'images/pack3.jpeg' %}" alt="Pack 3"></div>
+            <div class="slide-content">
+              <h3>Kochi – Munnar – Thekkady – Vagamon – Alleppey – Kochi</h3>
+              <p>5N/6D • Hills • Forest • Backwaters • Water Sports</p>
+            </div>
+            <button class="enquire-btn" onclick="openEnquiry('Kochi – Munnar – Thekkady – Vagamon – Alleppey – Kochi')">Enquire Now</button>
+          </div>
+
+          <!-- Slide 4 -->
+          <div class="slide">
+            <div class="img-wrap"><img src="{% static 'images/pack4.jpg' %}" alt="Pack 4"></div>
+            <div class="slide-content">
+              <h3>Kannur – Coorg – Wayanad – Calicut</h3>
+              <p>6N/7D • Wildlife • Hill Station • Backwaters</p>
+            </div>
+            <button class="enquire-btn" onclick="openEnquiry('Kannur – Coorg – Wayanad – Calicut')">Enquire Now</button>
+          </div>
+
+          <!-- Slide 5 -->
+          <div class="slide">
+            <div class="img-wrap"><img src="{% static 'images/pack5.jpg' %}" alt="Pack 5"></div>
+            <div class="slide-content">
+              <h3>Kannur – Coorg – Mysore – Wayanad – Calicut</h3>
+              <p>7N/8D • Wildlife • Hills • Backwaters • City Tour</p>
+            </div>
+            <button class="enquire-btn" onclick="openEnquiry('Kannur – Coorg – Mysore – Wayanad – Calicut')">Enquire Now</button>
+          </div>
+
+        </div> <!-- end track -->
+
+        <div class="carousel-dots" id="carouselDots" aria-hidden="false"></div>
+      </div> <!-- end carousel -->
+
+    </div> <!-- end packages card -->
+
+    <div class="card">
+      <h2 class="title"><i class="fa-solid fa-phone"></i> Contact</h2>
+      <p>📞+91 9745298377<br>✉ dreamtravellers.ta@gmail.com<br>📍 Kannur,Kerala<br>
+      📍 Surat,Gujarat<br>📍 Coimbatore,Tamilnadu<br>📍 Pune,Maharashtra</p>
+    </div>
+  </section>
+
+  <!-- Chatbot Button -->
+  <div id="web-chatbot-toggle" title="Open chat">💬</div>
+
+  <!-- Chatbot Window -->
+  <div id="web-chatbot" role="dialog" aria-label="Travel Assistant chatbot">
+    <div id="web-chatbot-header">
+      <div>Travel Assistant</div>
+      <div id="web-chatbot-close" style="cursor:pointer">✖</div>
+    </div>
+
+    <div id="web-chatbot-messages"></div>
+    <div id="typing-indicator">Travel Assistant is typing...</div>
+
+    <div id="chat-input-area">
+      <input id="chat-step-input" placeholder="Type your message or select options below">
+      <button id="chat-step-send">Send</button>
+    </div>
+  </div>
+
+  <!-- ================= PART 3: FULL ENQUIRY FORM (Travel Theme D) ================= -->
+  <div id="enquiryModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="enquiryTitle">
+    <div class="modal-box" role="document" aria-describedby="enquiry-desc">
+      <div class="modal-left">
+        <div class="modal-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <h2 id="enquiryTitle" style="margin:0">Travel Enquiry Form</h2>
+          <button aria-label="Close" onclick="closeEnquiry()" style="background:transparent;border:none;color:#fff;font-size:20px;cursor:pointer">✖</button>
+        </div>
+
+        <div id="enquiry-desc" style="font-size:13px;color:var(--muted);margin-bottom:12px">Fill traveler & trip details. The trip summary is shown on the right.</div>
+
+        <form id="travelFormHtml" onsubmit="return false;">
+          {% csrf_token %}
+
+          <!-- Traveler Details -->
+          <div class="form-section">
+            <h3>Traveler Details</h3>
+
+            <div class="field-row">
+              <div class="field">
+                <i class="fa-solid fa-user"></i>
+                <input id="name" name="name" type="text" placeholder="Full name *" required>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <i class="fa-solid fa-phone"></i>
+                <input id="phone" name="phone" type="tel" placeholder="Mobile number *" required maxlength="10" pattern="[0-9]{10}">
+              </div>
+              <div class="field">
+                <i class="fa-solid fa-envelope"></i>
+                <input id="email" name="email" type="email" placeholder="Email (optional)">
+              </div>
+            </div>
+          </div>
+
+          <!-- Trip Details -->
+          <div class="form-section">
+            <h3>Trip Details</h3>
+
+            <div class="field-row">
+              <div class="field" style="flex:1 1 60%">
+                <i class="fa-solid fa-map-location-dot"></i>
+                <input id="selectedPackage" name="selected_package" type="text" placeholder="Selected package" readonly>
+              </div>
+              <div class="field" style="flex:1 1 40%">
+                <i class="fa-solid fa-location-arrow"></i>
+                <input id="startingLocation" name="starting_location" type="text" placeholder="Starting location *" required>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <i class="fa-solid fa-calendar-days"></i>
+                <input id="travelDate" name="travel_date" type="date" placeholder="Travel date *" required>
+              </div>
+              <div class="field">
+                <i class="fa-solid fa-people-group"></i>
+                <select id="travelGroup" name="travel_group" required style="background:transparent;border:none">
+                  <option value="">Travel group *</option>
+                  <option>Family</option>
+                  <option>Friends</option>
+                  <option>Bachelors</option>
+                  <option>Honeymoon</option>
+                  <option>Corporate</option>
+                  <option>Other</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <i class="fa-solid fa-moon"></i>
+                <input id="nights" name="nights" type="number" placeholder="Nights *" required min="1">
+              </div>
+              <div class="field">
+                <i class="fa-solid fa-user-check"></i>
+                <input id="adults" name="adults" type="number" placeholder="Adults *" required min="1" value="1">
+              </div>
+              <div class="field">
+                <i class="fa-solid fa-child"></i>
+                <input id="children" name="children" type="number" placeholder="Children" min="0" value="0">
+              </div>
+            </div>
+          </div>
+
+          <!-- Preferences & Notes -->
+          <div class="form-section">
+            <h3>Preferences / Notes</h3>
+
+            <div class="field-row">
+              <div class="field" style="flex:1">
+                <i class="fa-solid fa-hotel"></i>
+                <select id="hotelCategory" name="hotel_category" required style="background:transparent;border:none">
+                  <option value="">Hotel category *</option>
+                  <option>Budget</option>
+                  <option>3 Star</option>
+                  <option>4 Star</option>
+                  <option>5 Star</option>
+                </select>
+              </div>
+
+              <div class="field" style="flex:1">
+                <i class="fa-solid fa-car-side"></i>
+                <select id="transportation" name="transportation" required style="background:transparent;border:none">
+                  <option value="">Transportation *</option>
+                  <option>Own</option>
+                  <option>Required</option>
+                  <option>Pick Up & Drop Only</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field" style="width:100%">
+                <i class="fa-solid fa-pen"></i>
+                <textarea id="extraRequirement" name="extra_requirement" rows="3" placeholder="Any specific requirement (optional)"></textarea>
+              </div>
+            </div>
+
+            <div class="modal-actions" style="margin-top:6px">
+              <button id="submitEnquiryBtn" class="btn-primary" type="button">Submit Enquiry</button>
+              <button type="button" class="btn-secondary" onclick="closeEnquiry()">Cancel</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Right summary panel -->
+      <div class="modal-right">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <div class="summary-title">Trip Summary</div>
+          <div style="font-size:12px;color:var(--muted)">Preview</div>
+        </div>
+
+        <div class="summary-card" id="tripSummaryCard">
+          <div class="summary-package" id="summaryPackage">— No package selected —</div>
+          <div class="summary-row"><div>Start</div><div id="summaryStart">—</div></div>
+          <div class="summary-row"><div>Date</div><div id="summaryDate">—</div></div>
+          <div class="summary-row"><div>Nights</div><div id="summaryNights">—</div></div>
+          <div class="summary-row"><div>Adults</div><div id="summaryAdults">—</div></div>
+          <div class="summary-row"><div>Children</div><div id="summaryChildren">—</div></div>
+          <div class="summary-row"><div>Hotel</div><div id="summaryHotel">—</div></div>
+          <div class="summary-row"><div>Transport</div><div id="summaryTransport">—</div></div>
+          <div style="margin-top:12px;font-size:13px;color:var(--muted)">Notes</div>
+          <div style="font-size:13px;margin-top:6px;color:#fff" id="summaryNotes">—</div>
+        </div>
+
+        <div style="margin-top:14px">
+          <button class="btn-primary" style="width:100%;margin-top:12px" onclick="openWhatsAppFromSummary()">Enquire on WhatsApp</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <h2>Dream Travellers</h2>
+      <p>Explore the world with personalized travel plans</p>
+
+      <div class="reviews-box">
+        <h3>What Our Customers Say</h3>
+        <div class="reviews-slider" id="reviewsSlider">
+          <div class="review-card">
+            <p class="review-text">"Dream travellers made my dream come true. They planned a perfect offbeat Kerala experience…"</p>
+            <div class="review-author">— Mohd Salman Khan ⭐⭐⭐⭐⭐</div>
+          </div>
+          <div class="review-card">
+            <p class="review-text">"Our workcation trip to Chandigarh–Manali was smooth and hassle-free. Excellent support and planning…"</p>
+            <div class="review-author">— Fasna CS ⭐⭐⭐⭐⭐</div>
+          </div>
+          <div class="review-card">
+            <p class="review-text">"Completed a Manali workation with Dream Travellers. Clean hotels, reliable drivers and flexible schedules..."</p>
+            <div class="review-author">— Happy Traveller ⭐⭐⭐⭐⭐</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-social">
+        <a href="https://facebook.com/YOUR_PAGE" target="_blank" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+        <a href="https://instagram.com/dreamtravellers_ta" target="_blank" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://wa.me/918714558566" target="_blank" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+      </div>
+
+      <p class="footer-copy">© 2025 Dream Travellers • All Rights Reserved</p>
+    </div>
+  </footer>
+
+  <!-- ================= SUBMIT SCRIPT (CSRF aware) & helpers ================= -->
+  <script>
+  // small utils
+  function getCookie(name) {
+    const v = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+    return v ? v.pop() : '';
+  }
+  const CSRFTOKEN = getCookie('csrftoken');
+
+  // carousel helpers (kept from your code)
+  const track = document.querySelector(".carousel-track");
+  const slides = () => document.querySelectorAll(".slide");
+  const dotsContainer = document.getElementById("carouselDots");
+  let carouselIndex = 0;
+  let carouselTimer = null;
+
+  function buildDots(){
+    if(!dotsContainer) return;
+    dotsContainer.innerHTML = '';
+    const s = slides();
+    s.forEach((_,i)=>{
+      const dot = document.createElement('span');
+      dot.addEventListener('click', ()=>{ goToSlide(i); resetCarouselTimer(); });
+      if(i===0) dot.classList.add('active');
+      dotsContainer.appendChild(dot);
+    });
+  }
+  function updateDots(){
+    if(!dotsContainer) return;
+    const dots = dotsContainer.children;
+    for(let i=0;i<dots.length;i++){
+      dots[i].classList.toggle('active', i===carouselIndex);
+    }
+  }
+  function goToSlide(i){
+    const total = slides().length;
+    carouselIndex = (i + total) % total;
+    if(track){
+      const targetSlide = slides()[carouselIndex];
+      if(targetSlide){
+        track.scrollTo({ left: targetSlide.offsetLeft, behavior: 'smooth' });
+      }
+    }
+    updateDots();
+  }
+  function nextSlide(){ goToSlide(carouselIndex + 1); }
+  function resetCarouselTimer(){ if(carouselTimer) clearInterval(carouselTimer); carouselTimer = setInterval(nextSlide, 3500); }
+
+  if(track){
+    let scrollTimeout = null;
+    track.addEventListener('scroll', () => {
+      if (scrollTimeout) clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        const slidesArr = Array.from(slides());
+        const centerX = track.scrollLeft + (track.clientWidth / 2);
+        let bestIndex = 0, bestDist = Infinity;
+        slidesArr.forEach((s, idx) => {
+          const slideCenter = s.offsetLeft + (s.offsetWidth/2);
+          const dist = Math.abs(slideCenter - centerX);
+          if (dist < bestDist) { bestDist = dist; bestIndex = idx; }
+        });
+        carouselIndex = bestIndex;
+        updateDots();
+      }, 80);
+    });
+  }
+
+  // WhatsApp opener
+  function openWhatsApp(packageName){
+    const phone = "918714558566";
+    const msg = `Hello, I am interested in the ${packageName} package. Please share more details.`;
+    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, "_blank");
+  }
+  function openWhatsAppFromSummary(){
+    const pkg = document.getElementById("selectedPackage").value || "Package enquiry";
+    openWhatsApp(pkg);
+  }
+
+  // Chatbot & formValues
+  const API_BASE = window.location.origin; // use same host by default
+  const formValues = {
+    name: "",
+    phone: "",
+    email: "",
+    selected_package: "",
+    starting_location: "",
+    travel_date: "",
+    travel_group: "",
+    nights: "",
+    adults: "",
+    children: "",
+    hotel_category: "",
+    transportation: "",
+    extra_requirement: ""
+  };
+
+  const chatWin = document.getElementById("web-chatbot");
+  const toggleBtn = document.getElementById("web-chatbot-toggle");
+  const closeBtn = document.getElementById("web-chatbot-close");
+  const messages = document.getElementById("web-chatbot-messages");
+  const typingIndicator = document.getElementById("typing-indicator");
+  const input = document.getElementById("chat-step-input");
+  const sendBtn = document.getElementById("chat-step-send");
+
+  toggleBtn.onclick = ()=>{ if(chatWin) chatWin.style.display='flex'; input.focus(); };
+  closeBtn.onclick = ()=> chatWin.style.display='none';
+
+  function escapeHtml(s){ return String(s||'').replaceAll('&','&amp;').replaceAll('<','&lt;'); }
+  function scrollToBottom(el){ if(!el) return; el.scrollTop = el.scrollHeight; }
+
+  function appendUser(text){
+    const d=document.createElement('div');
+    d.className='msg you';
+    d.innerHTML=`<div class="bubble">${escapeHtml(text)}</div>`;
+    messages.appendChild(d);
+    scrollToBottom(messages);
+  }
+  function appendBotBubbleEmpty(){
+    const d=document.createElement('div');
+    d.className='msg bot';
+    d.innerHTML=`<div class="bubble"></div>`;
+    messages.appendChild(d);
+    scrollToBottom(messages);
+    return d.querySelector('.bubble');
+  }
+  function typeIntoBubble(bubble, text, speed=12){
+    let i=0;
+    return new Promise(resolve=>{
+      function tick(){
+        bubble.textContent = text.slice(0,i++);
+        scrollToBottom(messages);
+        if(i<=text.length) setTimeout(tick,speed);
+        else resolve();
+      }
+      tick();
+    });
+  }
+  function showTyping(on=true){ if(typingIndicator) typingIndicator.style.display = on ? 'block' : 'none'; scrollToBottom(messages); }
+
+  // Location options from slides (package titles)
+  let LOCATION_OPTIONS = [];
+  function populateLocationOptionsFromSlides(){
+    LOCATION_OPTIONS = Array.from(document.querySelectorAll(".slide h3")).map(h => h.textContent.trim()).filter(Boolean);
+  }
+
+  // show multiple option buttons
+  function showOptions(question, key, options = [], mapTo){
+    const bubble = appendBotBubbleEmpty();
+    bubble.innerHTML = question;
+
+    const wrap = document.createElement("div");
+    wrap.className = "msg bot";
+    const bubble2 = document.createElement("div");
+    bubble2.className = "bubble";
+
+    const btnContainer = document.createElement("div");
+    btnContainer.style.display = "flex";
+    btnContainer.style.flexWrap = "wrap";
+    btnContainer.style.gap = "8px";
+    btnContainer.style.marginTop = "10px";
+
+    options.forEach(opt => {
+      const btn = document.createElement("button");
+      btn.textContent = opt;
+      btn.className = "action-btn";
+      btn.style.minWidth = "80px";
+      btn.onclick = () => {
+        // mapTo tells which backend/modal field to set
+        if(mapTo) {
+          formValues[mapTo] = opt;
+          // prefill modal field if present
+          const idMap = {
+            selected_package: "selectedPackage",
+            starting_location: "startingLocation",
+            travel_group: "travelGroup",
+            nights: "nights",
+            adults: "adults",
+            children: "children",
+            hotel_category: "hotelCategory",
+            transportation: "transportation"
+          };
+          const el = document.getElementById(idMap[mapTo] || mapTo);
+          if(el) el.value = opt;
+        }
+        appendUser(opt);
+        wrap.remove();
+        handleMissingFields();
+      };
+      btnContainer.appendChild(btn);
+    });
+
+    bubble2.appendChild(btnContainer);
+    wrap.appendChild(bubble2);
+    messages.appendChild(wrap);
+    scrollToBottom(messages);
+  }
+
+  async function handleMissingFields(){
+    const required = [
+      {chatKey:"name", label:"Please tell me your name.", mapTo:"name"},
+      {chatKey:"phone", label:"Please enter your 10-digit mobile number.", mapTo:"phone", inputType:"phone"},
+      {chatKey:"location", label:"Select the package you want to enquire", mapTo:"selected_package", type:"options", options: LOCATION_OPTIONS},
+      {chatKey:"nights", label:"How many nights?", mapTo:"nights", type:"options", options:["1","2","3","4","5","6","7","8","9","10"]},
+      {chatKey:"adults", label:"How many adults?", mapTo:"adults", type:"options", options:["1","2","3","4","5","6","7","8"]},
+      {chatKey:"children", label:"How many children?", mapTo:"children", type:"options", options:["0","1","2","3","4"]},
+      {chatKey:"date", label:"What is your travel date?", mapTo:"travel_date", inputType:"date"},
+      {chatKey:"hotel", label:"Preferred hotel category?", mapTo:"hotel_category", type:"options", options:["Budget","3 Star","4 Star","5 Star"]},
+      {chatKey:"travelWith", label:"Who are you travelling with?", mapTo:"travel_group", type:"options", options:["Family","Friends","Bachelors","Honeymoon","Corporate","Other"]}
+    ];
+
+    const missing = required.find(r => {
+      const val = formValues[r.mapTo];
+      return !val || String(val).trim() === "";
+    });
+
+    if(!missing){
+      showSummary();
+      return;
+    }
+
+    const ask = missing;
+
+    if(ask.type === "options" && Array.isArray(ask.options) && ask.options.length){
+      return showOptions(ask.label, ask.chatKey, ask.options, ask.mapTo);
+    }
+
+    const bubble = appendBotBubbleEmpty();
+    await typeIntoBubble(bubble, ask.label);
+
+    const wrap = document.createElement("div");
+    wrap.className="msg bot";
+    const bubble2 = document.createElement("div");
+    bubble2.className="bubble";
+    const formNode = document.createElement("div");
+    formNode.className="inline-form";
+
+    let field;
+    if(ask.inputType === "phone"){
+      field = document.createElement("input"); field.type="tel"; field.placeholder="Enter 10-digit mobile number"; field.maxLength = 10;
+    } else if(ask.inputType === "date"){
+      field = document.createElement("input"); field.type="date";
+    } else {
+      field = document.createElement("input"); field.type="text"; field.placeholder = ask.label;
+    }
+
+    formNode.appendChild(field);
+
+    const btnRow = document.createElement("div");
+    btnRow.style.marginTop="8px"; btnRow.style.display="flex"; btnRow.style.gap="8px";
+
+    const ok = document.createElement("button"); ok.className="action-btn"; ok.textContent="OK";
+    const skip = document.createElement("button"); skip.className="action-btn"; skip.style.background="#ff6b6b"; skip.textContent="Skip";
+    btnRow.appendChild(ok); btnRow.appendChild(skip);
+    formNode.appendChild(btnRow);
+    bubble2.appendChild(formNode);
+    wrap.appendChild(bubble2);
+    messages.appendChild(wrap);
+    scrollToBottom(messages);
+
+    ok.onclick = ()=>{
+      const val = (field.value || "").trim();
+      if(ask.inputType === "phone" && val && !/^\d{10}$/.test(val)){ alert("Please enter a valid 10-digit mobile number."); return; }
+      if((ask.chatKey === "name" || ask.chatKey === "phone" || ask.chatKey === "location") && !val){ alert("This field is required."); return; }
+
+      formValues[ask.mapTo] = val;
+      // set modal input if available
+      const idMap = {
+        name:"name", phone:"phone", selected_package:"selectedPackage", starting_location:"startingLocation",
+        travel_date:"travelDate", travel_group:"travelGroup", nights:"nights", adults:"adults", children:"children",
+        hotel_category:"hotelCategory", transportation:"transportation", extra_requirement:"extraRequirement", email:"email"
+      };
+      const el = document.getElementById(idMap[ask.mapTo] || ask.mapTo);
+      if(el) el.value = val;
+      appendUser(val || "(skipped)");
+      wrap.remove();
+      handleMissingFields();
+    };
+
+    skip.onclick = ()=>{
+      if(ask.chatKey === "name" || ask.chatKey === "phone" || ask.chatKey === "location"){ alert("Please provide this info (required)."); return; }
+      appendUser("(skipped)");
+      wrap.remove();
+      handleMissingFields();
+    };
+  }
+
+  function showSummary(){
+    const lines = [
+      `Name: ${formValues.name || "Not provided"}`,
+      `Phone: ${formValues.phone || "Not provided"}`,
+      `Package: ${formValues.selected_package || "Not provided"}`,
+      `Nights: ${formValues.nights || "Not provided"}`,
+      `Persons: ${formValues.adults || "N/A"} adults, ${formValues.children || "N/A"} children`,
+      `Date: ${formValues.travel_date || "Not specified"}`,
+      `Hotel: ${formValues.hotel_category || "Not specified"}`,
+      `Travel Group: ${formValues.travel_group || "Not specified"}`
+    ];
+    const html = `<b>Preview your enquiry</b><br><br>${lines.join("<br>")}<br><br>
+      <button class="action-btn" id="open-modal-from-chat">Open Enquiry Form</button>
+      <button class="action-btn" id="send-wa-chat" style="background:#25D366;color:#003;margin-left:8px">Send WhatsApp</button>`;
+    const wrap = document.createElement("div");
+    wrap.className="msg bot";
+    wrap.innerHTML = `<div class="bubble">${html}</div>`;
+    messages.appendChild(wrap);
+    scrollToBottom(messages);
+    setTimeout(()=>{
+      const openBtn = document.getElementById("open-modal-from-chat");
+      if(openBtn){
+        openBtn.onclick = ()=>{
+          // prefill modal fields from formValues
+          Object.keys(formValues).forEach(k=>{
+            const idMap = {
+              selected_package:"selectedPackage",
+              starting_location:"startingLocation",
+              travel_date:"travelDate",
+              travel_group:"travelGroup",
+              nights:"nights",
+              adults:"adults",
+              children:"children",
+              hotel_category:"hotelCategory",
+              transportation:"transportation",
+              extra_requirement:"extraRequirement",
+              name:"name",
+              phone:"phone",
+              email:"email"
+            };
+            const el = document.getElementById(idMap[k] || k);
+            if(el) el.value = formValues[k] || "";
+          });
+          openEnquiry(formValues.selected_package || "");
+        };
+      }
+      const waBtn = document.getElementById("send-wa-chat");
+      if(waBtn) waBtn.onclick = sendToWhatsApp;
+    }, 100);
+  }
+
+  async function sendToWhatsApp(){
+    try{
+      await fetch(API_BASE + "/api/save-enquiry/", {
+        method:"POST",
+        headers:{ "Content-Type":"application/json", "X-CSRFToken": CSRFTOKEN },
+        body: JSON.stringify(formValues)
+      });
+    }catch(e){ console.warn("Save failed", e); }
+
+    const BUSINESS_NUMBER = "918714558566";
+    const msg = [
+      "New Enquiry:",
+      `Name: ${formValues.name || ""}`,
+      `Phone: ${formValues.phone || ""}`,
+      `Package: ${formValues.selected_package || ""}`,
+      `Nights: ${formValues.nights || ""}`,
+      `Persons: Adults ${formValues.adults || ""}, Children ${formValues.children || ""}`,
+      `Date: ${formValues.travel_date || "Not specified"}`,
+      `Hotel: ${formValues.hotel_category || ""}`,
+      `Travel Group: ${formValues.travel_group || ""}`,
+      `Notes: ${formValues.extra_requirement || ""}`
+    ].join("\n");
+    window.open(`https://wa.me/${BUSINESS_NUMBER}?text=${encodeURIComponent(msg)}`, "_blank");
+  }
+
+  // Boot / init
+  function startApp(){
+    populateLocationOptionsFromSlides();
+    buildDots();
+    goToSlide(0);
+    resetCarouselTimer();
+    window.addEventListener('resize', ()=>{ goToSlide(carouselIndex); });
+    sendBtn.onclick = handleSend;
+    input.addEventListener('keydown', (e)=>{ if(e.key === "Enter") handleSend(); });
+
+    setTimeout(()=> {
+      const b = appendBotBubbleEmpty();
+      typeIntoBubble(b, "Hello 👋 I'm your travel assistant. Tell me your name or use the option buttons!") .then(()=> handleMissingFields());
+    }, 600);
+  }
+
+  async function handleSend(){
+    const text = input.value.trim();
+    if(!text) return;
+    appendUser(text);
+    input.value = '';
+    showTyping(true);
+
+    // local matching for locations/packages
+    const matched = LOCATION_OPTIONS.find(opt => opt.toLowerCase().includes(text.toLowerCase()));
+    if(matched){
+      const b = appendBotBubbleEmpty();
+      await typeIntoBubble(b, `I found "${matched}". Want to enquire?`);
+      const wrap = document.createElement("div"); wrap.className="msg bot";
+      const bubble2 = document.createElement("div"); bubble2.className="bubble";
+      const btn = document.createElement("button"); btn.className="action-btn"; btn.textContent="Enquire";
+      btn.onclick = ()=> {
+        // set selected_package and open modal
+        formValues.selected_package = matched;
+        const pkgEl = document.getElementById("selectedPackage"); if(pkgEl) pkgEl.value = matched;
+        openEnquiry(matched);
+      };
+      bubble2.appendChild(btn); wrap.appendChild(bubble2); messages.appendChild(wrap); scrollToBottom(messages);
+    } else {
+      // if user typed a name and name not set, set it
+      if(!formValues.name) formValues.name = text;
+      handleMissingFields();
+    }
+    showTyping(false);
+  }
+
+  // single robust openEnquiry/closeEnquiry
+  function openEnquiry(packageName){
+    const modal = document.getElementById("enquiryModal");
+    if(modal) modal.style.display = "flex";
+    if(packageName){
+      formValues.selected_package = packageName;
+      const pkg = document.getElementById("selectedPackage"); if(pkg) pkg.value = packageName;
+    }
+    // prefill form from formValues
+    try{
+      Object.keys(formValues).forEach(k=>{
+        const idMap = {
+          selected_package:"selectedPackage",
+          starting_location:"startingLocation",
+          travel_date:"travelDate",
+          travel_group:"travelGroup",
+          nights:"nights",
+          adults:"adults",
+          children:"children",
+          hotel_category:"hotelCategory",
+          transportation:"transportation",
+          extra_requirement:"extraRequirement",
+          name:"name",
+          phone:"phone",
+          email:"email"
+        };
+        const el = document.getElementById(idMap[k] || k);
+        if(el) el.value = formValues[k] || "";
+      });
+    }catch(e){ console.warn(e); }
+    refreshSummaryFromForm();
+  }
+  function closeEnquiry(){
+    const modal = document.getElementById("enquiryModal");
+    if(modal) modal.style.display = "none";
+  }
+
+  // click outside to close
+  document.getElementById("enquiryModal").addEventListener("click", function(e){
+    if(e.target === this) closeEnquiry();
+  });
+
+  // summary helpers
+  function updateSummaryField(id, value){
+    const el = document.getElementById(id);
+    if(el) el.textContent = value || "—";
+  }
+  function refreshSummaryFromForm(){
+    updateSummaryField("summaryPackage", document.getElementById("selectedPackage").value);
+    updateSummaryField("summaryStart", document.getElementById("startingLocation").value);
+    updateSummaryField("summaryDate", document.getElementById("travelDate").value);
+    updateSummaryField("summaryNights", document.getElementById("nights").value);
+    updateSummaryField("summaryAdults", document.getElementById("adults").value);
+    updateSummaryField("summaryChildren", document.getElementById("children").value);
+    updateSummaryField("summaryHotel", document.getElementById("hotelCategory").value);
+    updateSummaryField("summaryTransport", document.getElementById("transportation").value);
+    updateSummaryField("summaryNotes", document.getElementById("extraRequirement").value);
+  }
+
+  // live update summary as user edits in modal
+  ["selectedPackage","startingLocation","travelDate","nights","adults","children","hotelCategory","transportation","extraRequirement"].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el){
+      el.addEventListener("input", refreshSummaryFromForm);
+      el.addEventListener("change", refreshSummaryFromForm);
+    }
+  });
+
+  // Submit handler for modal form
+  document.getElementById("submitEnquiryBtn").addEventListener("click", async function () {
+    const btn = this;
+    btn.disabled = true;
+    btn.textContent = "Sending...";
+
+    const payload = {
+      name: document.getElementById("name").value.trim(),
+      phone: document.getElementById("phone").value.trim(),
+      email: document.getElementById("email").value.trim(),
+      selected_package: document.getElementById("selectedPackage").value.trim(),
+      starting_location: document.getElementById("startingLocation").value.trim(),
+      travel_date: document.getElementById("travelDate").value || null,
+      travel_group: document.getElementById("travelGroup").value,
+      nights: document.getElementById("nights").value,
+      adults: document.getElementById("adults").value,
+      children: document.getElementById("children").value || 0,
+      hotel_category: document.getElementById("hotelCategory").value,
+      transportation: document.getElementById("transportation").value,
+      extra_requirement: document.getElementById("extraRequirement").value.trim()
+    };
+
+    // Basic validation
+    if(!payload.name || !/^\d{10}$/.test(payload.phone) || !payload.starting_location || !payload.travel_date){
+      alert("Please fill required fields correctly (name, 10-digit phone, starting location, travel date).");
+      btn.disabled = false;
+      btn.textContent = "Submit Enquiry";
+      return;
+    }
+
+    try{
+      const res = await fetch("/api/save-enquiry/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": CSRFTOKEN
+        },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json().catch(()=>({status:"error", message:"Invalid JSON response"}));
+      if(res.ok && data.status === "ok"){
+        alert("Enquiry submitted successfully! Ref: " + (data.id || "N/A"));
+        // update chat-side formValues so chat preview matches
+        Object.assign(formValues, payload);
+        closeEnquiry();
+        document.getElementById("travelFormHtml").reset();
+        document.getElementById("selectedPackage").value = "";
+        refreshSummaryFromForm();
+      } else {
+        alert("Error saving enquiry: " + (data.message || data.detail || "server error"));
+      }
+    } catch(err){
+      console.error(err);
+      alert("Network error: " + err.message);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Submit Enquiry";
+    }
+  });
+
+  // expose debug functions (optional)
+  window._dt = { goToSlide, resetCarouselTimer, openWhatsApp, populateLocationOptionsFromSlides };
+
+  document.addEventListener("DOMContentLoaded", ()=>{ startApp(); refreshSummaryFromForm(); });
+  </script>
+
+</body>
+</html>
