@@ -26,7 +26,7 @@
   }
 
   /* Logo */
- .top-left-logo {
+.top-left-logo {
   position: fixed;
   top: 28px;        /* More natural vertical spacing */
   left: 28px;       /* Slightly more inside */
@@ -38,7 +38,6 @@
   border-radius: 12px;
   filter: drop-shadow(0 0 10px rgba(255,255,255,0.7));
 }
-
 
   /* Hero */
   .hero{height:70vh;display:flex;align-items:center;justify-content:center;text-align:center;padding-top:40px}
@@ -334,6 +333,220 @@
     width: 120px;   /* Keeps logo proportional on small screens */
   }
 }
+/* Modern Contact Block */
+.contact-modern {
+  text-align: center;
+  padding-top: 10px;
+}
+
+/* Floating Icons Row */
+.contact-floating-icons {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin: 15px 0 20px;
+}
+
+.c-icon {
+  width: 48px;
+  height: 48px;
+  background: rgba(255,255,255,0.18);
+  backdrop-filter: blur(8px);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  transition: 0.3s;
+  color: #fff;
+}
+
+.c-icon:hover {
+  transform: scale(1.12);
+  background: linear-gradient(135deg, var(--accent1), var(--accent2));
+  color: #003;
+}
+
+/* QR Spotlight */
+/* ---------- ENHANCED QR CODE ---------- */
+.enhanced-qr {
+  position: relative;
+  width: 210px;
+  height: 210px;
+  margin: 0 auto;
+  border-radius: 50%;
+  padding: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: radial-gradient(circle at center,
+      rgba(255,255,255,0.2) 0%,
+      rgba(255,255,255,0.08) 40%,
+      rgba(0,0,0,0.15) 80%);
+  
+  box-shadow:
+    0 0 18px rgba(255,255,255,0.25),
+    0 8px 28px rgba(0,0,0,0.35),
+    inset 0 0 12px rgba(255,255,255,0.25);
+
+  animation: qrFloat 4s ease-in-out infinite;
+}
+
+.enhanced-qr img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: contain;
+}
+
+/* Inner Glass Ring */
+.qr-glass {
+  position:absolute;
+  width:100%;
+  height:100%;
+  border-radius:50%;
+  backdrop-filter:blur(4px);
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.12);
+  pointer-events:none;
+}
+
+/* Floating Effect */
+@keyframes qrFloat {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0); }
+}
+
+/* ---------- ENHANCED WHATSAPP BUTTON ---------- */
+.enhanced-wa {
+  margin-top: 12px;
+  background: linear-gradient(135deg, #22ff8c, #10cc6a);
+  font-size: 17px;
+  padding: 14px;
+  border-radius: 14px;
+
+  box-shadow:
+    0 0 10px rgba(34,255,140,0.5),
+    0 4px 14px rgba(0,0,0,0.3);
+
+  transition: 0.25s ease-in-out;
+}
+
+.enhanced-wa:hover {
+  transform: scale(1.05);
+  box-shadow:
+    0 0 16px rgba(34,255,140,0.8),
+    0 6px 18px rgba(0,0,0,0.35);
+}
+
+
+/* Mini contact details */
+.contact-mini {
+  margin-top: 16px;
+  font-size: 13px;
+  opacity: 0.88;
+  line-height: 1.6;
+}
+
+.contact-mini i {
+  width: 18px;
+}
+
+/* Location Pills */
+.location-pills {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 18px 0;
+}
+
+.location-pills span {
+  padding: 6px 12px;
+  background: rgba(255,255,255,0.16);
+  border-radius: 20px;
+  font-size: 12px;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* WhatsApp Button */
+.wa-btn {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #25D366, #0fdd82);
+  border-radius: 12px;
+  text-align: center;
+  color: #003;
+  font-weight: 600;
+  margin-top: 10px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  transition: 0.3s;
+}
+
+.wa-btn:hover {
+  transform: scale(1.03);
+}
+/* FIX: Remove oval QR on some screens */
+.enhanced-qr img {
+  aspect-ratio: 1 / 1;
+}
+
+/* FIX: Mobile scaling */
+@media (max-width: 480px) {
+  .c-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+  .enhanced-qr {
+    width: 170px;
+    height: 170px;
+  }
+}
+/* Square QR container */
+.enhanced-qr-square {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+    
+    background: radial-gradient(circle at center,
+        rgba(255,255,255,0.16) 0%,
+        rgba(255,255,255,0.07) 40%,
+        rgba(0,0,0,0.18) 80%
+    );
+
+    border-radius: 16px;
+    padding: 10px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    box-shadow:
+        0 0 14px rgba(255,255,255,0.25),
+        0 8px 22px rgba(0,0,0,0.35),
+        inset 0 0 12px rgba(255,255,255,0.18);
+
+    animation: qrFloat 4s ease-in-out infinite;
+}
+
+.enhanced-qr-square img {
+    width: 75%;
+    height: 75%;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+/* soft floating animation */
+@keyframes qrFloat {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+    100% { transform: translateY(0); }
+}
 
   </style>
 </head>
@@ -348,6 +561,7 @@
       <div class="tagline">Discover unforgettable journeys crafted just for you</div>
     </div>
   </section>
+  
 
   <section class="card-row">
     <div class="card">
@@ -419,13 +633,49 @@
       </div> <!-- end carousel -->
 
     </div> <!-- end packages card -->
+<div class="card contact-modern">
+  <h2 class="title"><i class="fa-solid fa-phone"></i> Contact</h2>
 
-    <div class="card">
-      <h2 class="title"><i class="fa-solid fa-phone"></i> Contact</h2>
-      <p>📞+91 9745298377<br>✉ dreamtravellers.ta@gmail.com<br>📍 Kannur,Kerala<br>
-      📍 Surat,Gujarat<br>📍 Coimbatore,Tamilnadu<br>📍 Pune,Maharashtra</p>
-    </div>
-  </section>
+  <!-- Floating Quick Icons -->
+  <div class="contact-floating-icons">
+    <a href="tel:+919745298377" class="c-icon"><i class="fa-solid fa-phone"></i></a>
+    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=dreamtravellers.ta@gmail.com" target="_blank" class="c-icon"><i class="fa-solid fa-envelope"></i></a>
+    {% comment %} <a href="https://dreamtravellers.onrender.com" target="_blank" class="c-icon"> {% endcomment %}
+      {% comment %} <i class="fa-solid fa-globe"></i> {% endcomment %}
+    </a>
+    {% comment %} <a href="https://wa.me/919745298377" target="_blank" class="c-icon">
+      <i class="fa-brands fa-whatsapp"></i>
+    </a> {% endcomment %}
+  </div>
+
+  <!-- Premium Glass QR -->
+  <div class="enhanced-qr-square">
+    <div class="qr-glass-square"></div>
+    <img src="{% static 'images/contact-qr.png' %}" alt="WhatsApp QR">
+  </div>
+
+  {% comment %} <!-- Contact Info -->
+  <div class="contact-mini">
+    <div><i class="fa-solid fa-phone"></i> +91 9745298377</div>
+    <div><i class="fa-solid fa-envelope"></i> dreamtravellers.ta@gmail.com</div>
+    <div><i class="fa-solid fa-globe"></i> dreamtravellers.onrender.com</div>
+  </div> {% endcomment %}
+
+  <!-- Locations -->
+  <div class="location-pills">
+    <span>Kannur</span>
+    <span>Surat</span>
+    <span>Coimbatore</span>
+    <span>Pune</span>
+  </div>
+
+  <!-- Premium WA Button -->
+  <a class="enhanced-wa" href="https://wa.me/919745298377" target="_blank">
+    <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp
+  </a>
+</div>
+
+
 
   <!-- Chatbot Button -->
   <div id="web-chatbot-toggle" title="Open chat">💬</div>
@@ -520,15 +770,15 @@
             <div class="field-row">
               <div class="field">
                 <i class="fa-solid fa-moon"></i>
-                <input id="nights" name="nights" type="number" placeholder="Nights *" required min="1">
+                <input id="Calcnights" name="nights" type="number" placeholder="Nights *" required min="1">
               </div>
               <div class="field">
                 <i class="fa-solid fa-user-check"></i>
-                <input id="adults" name="adults" type="number" placeholder="Adults *" required min="1" value="1">
+                <input id="Calcadults" name="adults" type="number" placeholder="Adults *" required min="1" value="1">
               </div>
               <div class="field">
                 <i class="fa-solid fa-child"></i>
-                <input id="children" name="children" type="number" placeholder="Children" min="0" value="0">
+                <input id="Calcchildren" name="children" type="number" placeholder="Children" min="0" value="0">
               </div>
             </div>
           </div>
@@ -543,7 +793,7 @@
                 <select id="hotelCategory" name="hotel_category" required style="background:transparent;border:none">
                   <option value="">Hotel category *</option>
                   <option>Budget</option>
-                  <option>2 Star</option> 
+                  <option>2 Star</option>
                   <option>3 Star</option>
                   <option>4 Star</option>
                   <option>5 Star</option>
@@ -602,7 +852,6 @@
       </div>
     </div>
   </div>
-
   <footer class="footer">
     <div class="footer-content">
       <h2>Dream Travellers</h2>
@@ -635,6 +884,221 @@
       <p class="footer-copy">© 2025 Dream Travellers • All Rights Reserved</p>
     </div>
   </footer>
+<!-- Premium Budget Calculator — drop this block near the end of your <body> (after enquiry modal) -->
+<!-- This is a self-contained premium calculator: HTML + CSS + JS. IDs prefixed with dt- to avoid clashes. -->
+<div id="dt-budgetModal" class="dt-budget-overlay" aria-hidden="true" role="dialog" aria-labelledby="dt-budgetTitle">
+  <div class="dt-budget-box">
+    <header class="dt-budget-header">
+      <h2 id="dt-budgetTitle">✨Travel Budget Planner</h2>
+      <button id="dt-closeBudget" class="dt-close" aria-label="Close calculator">✖</button>
+    </header>
+
+    <main class="dt-budget-main">
+      <section class="dt-left">
+        <label class="dt-row"><span>Adults</span>
+          <input id="dt-budgetAdults" type="number" value="2" min="1" />
+        </label>
+
+        <label class="dt-row"><span>Children</span>
+          <input id="dt-budgetChildren" type="number" value="0" min="0" />
+        </label>
+
+        <label class="dt-row"><span>Nights</span>
+          <input id="dt-budgetNights" type="number" value="3" min="1" />
+        </label>
+
+        <label class="dt-row"><span>Hotel Category (per person / night)</span>
+          <select id="dt-budgetHotelType">
+            <option value="1800">Budget — ₹1,800 pp/night</option>
+            <option value="2500">Mid — ₹2,500 pp/night</option>
+            <option value="3800">Premium — ₹3,800 pp/night</option>
+          </select>
+        </label>
+
+        <label class="dt-row"><span>Food (per person / day)</span>
+          <input id="dt-budgetFood" type="number" value="400" min="0" />
+        </label>
+
+        <label class="dt-row"><span>Transport (per day)</span>
+          <select id="dt-budgetTransport">
+            <option value="800">Sedan — ₹800 / day</option>
+            <option value="1000">SUV — ₹1,000 / day</option>
+            <option value="1500">Traveller — ₹1,500 / day</option>
+          </select>
+        </label>
+
+        <label class="dt-row"><span>Activities / Extras (total)</span>
+          <input id="dt-budgetActivities" type="number" value="2000" min="0" />
+        </label>
+
+        <div class="dt-actions">
+          <button id="dt-calcBtn" class="dt-btn dt-btn-primary">Calculate estimate</button>
+          <button id="dt-applyBtn" class="dt-btn dt-btn-secondary">Apply to enquiry</button>
+        </div>
+      </section>
+
+      <aside class="dt-right">
+        <h3>Estimate</h3>
+        <div class="dt-line"><span>Hotel</span><span id="dt-outHotel">₹0</span></div>
+        <div class="dt-line"><span>Food</span><span id="dt-outFood">₹0</span></div>
+        <div class="dt-line"><span>Transport</span><span id="dt-outTransport">₹0</span></div>
+        <div class="dt-line"><span>Activities</span><span id="dt-outActivities">₹0</span></div>
+        <hr />
+        <div class="dt-total"><span>Total</span><span id="dt-outTotal">₹0</span></div>
+        <div class="dt-sub"><span>Per person</span><span id="dt-outPer">₹0</span></div>
+
+        <small class="dt-note">Tip: "Apply to enquiry" will prefill the enquiry modal's adults, children and nights fields.</small>
+      </aside>
+    </main>
+  </div>
+</div>
+
+<!-- Floating trigger button -->
+<button id="dt-floatingBudgetBtn" class="dt-floating-btn" aria-controls="dt-budgetModal" aria-expanded="false" title="Open budget planner">💰</button>
+
+<style>
+/* Scoped premium styles (prefix dt- ) */
+.dt-budget-overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:linear-gradient(180deg, rgba(2,6,23,0.6), rgba(2,6,23,0.6));backdrop-filter:blur(8px);z-index:7000}
+.dt-budget-box{width:92%;max-width:980px;border-radius:18px;background:linear-gradient(180deg, rgba(8,12,20,0.95), rgba(6,10,18,0.98));border:1px solid rgba(255,255,255,0.06);box-shadow:0 10px 40px rgba(0,0,0,0.6);overflow:hidden;color:#fff;font-family:inherit}
+.dt-budget-header{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid rgba(255,255,255,0.03)}
+.dt-budget-header h2{margin:0;font-size:20px;background:linear-gradient(90deg,#00eaff,#00ffbf);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.dt-close{background:transparent;border:none;color:#fff;font-size:20px;cursor:pointer}
+.dt-budget-main{display:flex;gap:20px;padding:18px}
+.dt-left{flex:1;display:flex;flex-direction:column;gap:12px;padding-right:6px}
+.dt-right{width:320px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
+.dt-row{display:flex;flex-direction:column;gap:6px;font-size:14px}
+.dt-row span{font-weight:600;color:rgba(255,255,255,0.85)}
+.dt-row input, .dt-row select{padding:10px;border-radius:10px;border:none;background:rgba(255,255,255,0.95);color:#000;font-size:14px}
+.dt-actions{display:flex;gap:10px;margin-top:6px}
+.dt-btn{flex:1;padding:12px;border-radius:12px;border:none;cursor:pointer;font-weight:700}
+.dt-btn-primary{background:linear-gradient(135deg,#00eaff,#00ffbf);color:#003}
+.dt-btn-secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:#fff}
+.dt-line{display:flex;justify-content:space-between;margin-bottom:10px;font-weight:600}
+.dt-total{display:flex;justify-content:space-between;margin-top:10px;font-size:18px;font-weight:900}
+.dt-sub{display:flex;justify-content:space-between;margin-top:6px;opacity:0.9}
+.dt-note{display:block;margin-top:10px;color:rgba(255,255,255,0.7);font-size:12px}
+
+/* Floating button */
+.dt-floating-btn{position:fixed;right:22px;bottom:95px;width:62px;height:62px;border-radius:50%;background:linear-gradient(135deg,#ffb300,#ff7a00);border:none;font-size:26px;z-index:7100;box-shadow:0 10px 30px rgba(0,0,0,0.45);cursor:pointer}
+.dt-floating-btn:focus{outline:3px solid rgba(255,255,255,0.12)}
+
+/* Responsive */
+@media (max-width:880px){.dt-budget-main{flex-direction:column}.dt-right{width:100%}}
+</style>
+
+<script>
+(function(){
+  // helpers
+  const qs = id => document.getElementById(id);
+  const money = n => '₹' + Number(n).toLocaleString('en-IN');
+
+  const modal = qs('dt-budgetModal');
+  const openBtn = qs('dt-floatingBudgetBtn');
+  const closeBtn = qs('dt-closeBudget');
+  const calcBtn = qs('dt-calcBtn');
+  const applyBtn = qs('dt-applyBtn');
+
+  // inputs
+  const adultsIn = qs('dt-budgetAdults');
+  const childrenIn = qs('dt-budgetChildren');
+  const nightsIn = qs('dt-budgetNights');
+  const hotelIn = qs('dt-budgetHotelType');
+  const foodIn = qs('dt-budgetFood');
+  const transportIn = qs('dt-budgetTransport');
+  const activitiesIn = qs('dt-budgetActivities');
+
+  // outputs
+  const outHotel = qs('dt-outHotel');
+  const outFood = qs('dt-outFood');
+  const outTransport = qs('dt-outTransport');
+  const outActivities = qs('dt-outActivities');
+  const outTotal = qs('dt-outTotal');
+  const outPer = qs('dt-outPer');
+
+  function openBudget(){ modal.style.display = 'flex'; modal.setAttribute('aria-hidden','false'); openBtn.setAttribute('aria-expanded','true'); }
+  function closeBudget(){ modal.style.display = 'none'; modal.setAttribute('aria-hidden','true'); openBtn.setAttribute('aria-expanded','false'); }
+
+  function calculateBudget(){
+    const adults = Math.max(1, Number(adultsIn.value) || 0);
+    const children = Math.max(0, Number(childrenIn.value) || 0);
+    const nights = Math.max(1, Number(nightsIn.value) || 1);
+    const hotelRate = Number(hotelIn.value) || 0; // per person per night
+    const foodRate = Number(foodIn.value) || 0; // per person per day
+    const transportRate = Number(transportIn.value) || 0; // per day (group)
+    const activities = Number(activitiesIn.value) || 0; // flat total
+
+    // hotel: hotelRate * (adults + childrenFactor) * nights
+    // treat children as 0.6 of adult cost (common approximation)
+    const childFactor = 0.6;
+    const paxEquivalent = adults + children * childFactor;
+    const hotelCost = hotelRate * paxEquivalent * nights;
+
+    // food: foodRate * (adults + children) * nights
+    const foodCost = foodRate * (adults + children) * nights;
+
+    // transport: transportRate * nights
+    const transportCost = transportRate * nights;
+
+    const activitiesCost = activities;
+
+    const total = hotelCost + foodCost + transportCost + activitiesCost;
+    const perPerson = total / (adults + children || 1);
+
+    // write outputs
+    outHotel.textContent = money(Math.round(hotelCost));
+    outFood.textContent = money(Math.round(foodCost));
+    outTransport.textContent = money(Math.round(transportCost));
+    outActivities.textContent = money(Math.round(activitiesCost));
+    outTotal.textContent = money(Math.round(total));
+    outPer.textContent = money(Math.round(perPerson));
+
+    return { adults, children, nights, total };
+  }
+
+  // apply calculated values to enquiry modal (if present)
+  function applyToEnquiry(){
+    // calculate first
+    const res = calculateBudget();
+    try{
+      // safe-guard: try several possible IDs (your page has different IDs in different versions)
+      const possibleNights = [ 'nights', 'Calcnights', 'dt-nights' ];
+      const possibleAdults = [ 'adults', 'Calcadults', 'dt-adults' ];
+      const possibleChildren = [ 'children', 'Calcchildren', 'dt-children' ];
+
+      let setOne = false;
+      // nights
+      for(const id of possibleNights){ const el = document.getElementById(id); if(el){ el.value = res.nights; setOne = true; break; } }
+      for(const id of possibleAdults){ const el = document.getElementById(id); if(el){ el.value = res.adults; setOne = true; break; } }
+      for(const id of possibleChildren){ const el = document.getElementById(id); if(el){ el.value = res.children; setOne = true; break; } }
+
+      // open enquiry modal if available
+      const enquiry = document.getElementById('enquiryModal') || document.getElementById('dt-enquiryModal');
+      if(enquiry) enquiry.style.display = 'flex';
+
+      if(!setOne){ alert('Applied values, but could not find enquiry fields on this page. They may use different input IDs.'); }
+    }catch(e){ console.warn('applyToEnquiry failed', e); }
+  }
+
+  // events
+  openBtn && openBtn.addEventListener('click', ()=> openBudget());
+  closeBtn && closeBtn.addEventListener('click', ()=> closeBudget());
+  calcBtn && calcBtn.addEventListener('click', ()=> calculateBudget());
+  applyBtn && applyBtn.addEventListener('click', ()=> applyToEnquiry());
+
+  // keyboard: esc to close
+  document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && modal.style.display === 'flex') closeBudget(); });
+
+  // init: auto-calc with defaults on first open
+  openBtn && openBtn.addEventListener('mouseenter', ()=>{/* small affordance, no-op */});
+
+  // expose to window for debugging
+  window.dtBudget = { openBudget, closeBudget, calculateBudget, applyToEnquiry };
+})();
+</script>
+<!-- End premium calculator -->
+
+
+
 
   <!-- ================= SUBMIT SCRIPT (CSRF aware) & helpers ================= -->
   <script>
@@ -811,9 +1275,9 @@
             selected_package: "selectedPackage",
             starting_location: "startingLocation",
             travel_group: "travelGroup",
-            nights: "nights",
-            adults: "adults",
-            children: "children",
+            nights: "Calcnights",
+            adults: "Calcadults",
+            children: "Calcchildren",
             hotel_category: "hotelCategory",
             transportation: "transportation"
           };
@@ -990,7 +1454,7 @@
       });
     }catch(e){ console.warn("Save failed", e); }
 
-    const BUSINESS_NUMBER = "919745298377";
+    const BUSINESS_NUMBER = "918714558566";
     const msg = [
       "New Enquiry:",
       `Name: ${formValues.name || ""}`,
@@ -1103,16 +1567,16 @@
     updateSummaryField("summaryPackage", document.getElementById("selectedPackage").value);
     updateSummaryField("summaryStart", document.getElementById("startingLocation").value);
     updateSummaryField("summaryDate", document.getElementById("travelDate").value);
-    updateSummaryField("summaryNights", document.getElementById("nights").value);
-    updateSummaryField("summaryAdults", document.getElementById("adults").value);
-    updateSummaryField("summaryChildren", document.getElementById("children").value);
+    updateSummaryField("summaryNights", document.getElementById("Calcnights").value);
+    updateSummaryField("summaryAdults", document.getElementById("Calcadults").value);
+    updateSummaryField("summaryChildren", document.getElementById("Calcchildren").value);
     updateSummaryField("summaryHotel", document.getElementById("hotelCategory").value);
     updateSummaryField("summaryTransport", document.getElementById("transportation").value);
     updateSummaryField("summaryNotes", document.getElementById("extraRequirement").value);
   }
 
   // live update summary as user edits in modal
-  ["selectedPackage","startingLocation","travelDate","nights","adults","children","hotelCategory","transportation","extraRequirement"].forEach(id=>{
+  ["selectedPackage","startingLocation","travelDate","Calcnights","Calcadults","Calcchildren","hotelCategory","transportation","extraRequirement"].forEach(id=>{
     const el = document.getElementById(id);
     if(el){
       el.addEventListener("input", refreshSummaryFromForm);
@@ -1134,9 +1598,9 @@
       starting_location: document.getElementById("startingLocation").value.trim(),
       travel_date: document.getElementById("travelDate").value || null,
       travel_group: document.getElementById("travelGroup").value,
-      nights: document.getElementById("nights").value,
-      adults: document.getElementById("adults").value,
-      children: document.getElementById("children").value || 0,
+      nights: document.getElementById("Calcnights").value,
+      adults: document.getElementById("Calcadults").value,
+      children: document.getElementById("Calcchildren").value || 0,
       hotel_category: document.getElementById("hotelCategory").value,
       transportation: document.getElementById("transportation").value,
       extra_requirement: document.getElementById("extraRequirement").value.trim()
@@ -1185,6 +1649,15 @@
 
   document.addEventListener("DOMContentLoaded", ()=>{ startApp(); refreshSummaryFromForm(); });
   </script>
-
 </body>
-</html>
+</html>  
+
+
+
+
+
+
+
+
+
+

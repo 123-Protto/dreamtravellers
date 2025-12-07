@@ -18,7 +18,6 @@ ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
     ".onrender.com",
-    "*",
 ]
 
 # ================================
@@ -104,10 +103,8 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # IMPORTANT: This MUST exist for images to load
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
+    BASE_DIR/ "enquiries" / "static",
 ]
-
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 if not DEBUG:
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
