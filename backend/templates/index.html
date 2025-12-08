@@ -24,6 +24,7 @@ html, body {
 }
 
 body {
+    background-color: #000; 
     background:
         linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
         url("{% static 'images/bgp.jpg' %}") center/cover no-repeat fixed;
@@ -1034,13 +1035,6 @@ body {
         padding: 8px !important;
     }
 }
-/* Disable fixed background on iPhone Safari */
-@supports (-webkit-touch-callout: none) {
-    body {
-        background-attachment: scroll !important;
-    }
-}
-
 
   </style>
 </head>
