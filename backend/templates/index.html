@@ -10,6 +10,34 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
+  * {
+    box-sizing: border-box;
+}
+
+html, body {
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    margin: 0;
+    height: 100%;
+    overflow-x: hidden !important;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background:
+        linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
+        url("{% static 'images/bgp.jpg' %}") center/cover no-repeat fixed;
+    background-attachment: fixed;
+}
+
+.background-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    pointer-events: none;
+    z-index: -1;
+}
+
   :root{
     --accent1:#00eaff;
     --accent2:#00ffbf;
@@ -19,11 +47,14 @@
     --card-radius: 14px;
   }
 
-  html,body{
-    margin:0; height:100%; font-family:'Poppins',sans-serif;
-    background:linear-gradient(rgba(0,0,0,0.65),rgba(0,0,0,0.65)),url("{% static 'images/bgp.jpg' %}") center/cover no-repeat fixed;
-    color:#fff;
-  }
+  html, body {
+    margin: 0;
+    height: 100%;
+    font-family: 'Poppins', sans-serif;
+    overflow-x: hidden;
+    color: #fff;
+}
+
 
   /* Logo */
 .top-left-logo {
@@ -54,8 +85,12 @@
 
   /* Carousel */
   .carousel{border-radius:12px;overflow:hidden;position:relative;display:flex;flex-direction:column; background: rgba(0,0,0,0.06);}
-  .carousel-track{display:flex;transition:transform .6s ease;scroll-behavior:smooth;overflow-x:auto;-webkit-overflow-scrolling:touch}
-  .slide{min-width:100%;padding:18px 14px 110px 14px;box-sizing:border-box;position:relative;scroll-snap-align:center}
+  /* keep horizontal scroll but hide scrollbar UI (preserve touch scrolling) */
+  .carousel-track{display:flex;transition:transform .6s ease;scroll-behavior:smooth;overflow-x:auto;-webkit-overflow-scrolling:touch; -ms-overflow-style: none; scrollbar-width: none;}
+  .carousel-track::-webkit-scrollbar{ display: none; height: 0; }
+
+  /* force each slide to be exactly the carousel width to prevent centering issues */
+  .slide{min-width:100%; flex:0 0 100%; padding:18px 14px 80px 14px; box-sizing:border-box; position:relative; scroll-snap-align:center;}
   .img-wrap{ width:100%; overflow:hidden; border-radius:10px; }
   .slide img{width:100%;height:180px;object-fit:cover;border-radius:10px;box-shadow:0 8px 18px rgba(0,0,0,0.32)}
   .slide-content{margin-top:10px}
@@ -259,7 +294,7 @@
   .footer-social a{font-size:26px;color:#fff;transition:0.3s}
   .footer-copy{margin-top:20px;opacity:0.7;font-size:14px}
   .reviews-box{margin:30px auto;max-width:600px}
-  .reviews-slider{display:flex;overflow-x:auto;gap:16px;scroll-snap-type:x mandatory;padding:10px}
+  .reviews-slider{display:flex;overflow-x:auto;gap:16px;scrollbar-width:none;padding:10px}
   .review-card{min-width:260px;background:rgba(255,255,255,0.12);padding:18px;border-radius:14px;scroll-snap-align:start;backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.15)}
 
   /* ================= MOBILE FIXES ================= */
@@ -356,12 +391,18 @@
   pointer-events:none;
 }
 
-/* Floating Effect */
-@keyframes qrFloat {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
-  100% { transform: translateY(0); }
-}
+/* Missing QR-glass-square (used in markup) */
+{% comment %} .qr-glass-square {
+  position:absolute;
+  width:100%;
+  height:100%;
+  border-radius:16px;
+  backdrop-filter:blur(4px);
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.12);
+  pointer-events:none;
+} {% endcomment %}
+
 
 /* ---------- ENHANCED WHATSAPP BUTTON ---------- */
 .enhanced-wa {
@@ -472,6 +513,10 @@
     object-fit: cover;
     border-radius: 12px;
 }
+.slide {
+    min-width: 100% !important;
+    flex: 0 0 100% !important;
+}
 
 /* soft floating animation */
 @keyframes qrFloat {
@@ -479,7 +524,7 @@
     50% { transform: translateY(-6px); }
     100% { transform: translateY(0); }
 }
-/* =========================
+ /* =========================
    FINAL RESPONSIVE SYSTEM (A)
    ========================= */
 
@@ -511,7 +556,8 @@
   .modal-box {
     flex-direction:column;
     margin:16px;
-    max-height:88vh;
+    max-height: 85vh !important;
+    overflow-y: auto !important;
     overflow:auto;
   }
 
@@ -565,7 +611,6 @@
 
   /* Carousel improvement */
   .carousel-track { scroll-snap-type:x mandatory; }
-  .slide { min-width:92%; flex:0 0 92%; padding:16px; }
   .slide img { height:160px; }
 
   /* Enquiry modal stacked */
@@ -625,8 +670,6 @@
   .hero-content h1 { font-size:24px; }
 
   .card { width:96%; padding:14px; }
-
-  .slide { min-width:94%; flex:0 0 94%; padding-bottom:72px; }
   .slide img { height:140px; }
 
   #web-chatbot {
@@ -663,16 +706,22 @@
 
 @media (max-width: 768px) {
     .top-left-logo {
-        top: 8px;      /* reduce overlapping risk */
-        left: 10px;
+        top: 12px;      /* reduce overlapping risk */
+        left: 12px;
     }
 
     .top-left-logo img {
-        width: 95px !important;
+        width: 85px;
     }
 
     .hero {
-        padding-top: 140px !important;  /* pushes hero text downward */
+        padding-top: 160px !important;  /* pushes hero text downward */
+    }
+}
+@media (max-width: 768px) {
+    .card {
+        width: 92% !important; 
+        margin: 0 auto;
     }
 }
 
@@ -690,6 +739,20 @@
         padding-top: 155px !important;  /* ensures no overlap even on smallest screens */
     }
 }
+@media (max-width: 480px) {
+    .slide {
+        padding: 14px !important;
+    }
+    .slide img {
+        height: 130px !important;
+    }
+}
+.slide {
+    box-sizing: border-box;
+    max-width: 100% !important;
+}
+
+
 /* ================== FIX BUDGET CALCULATOR RESPONSIVENESS ================== */
 
 /* Tablet & small laptop fixes */
@@ -768,7 +831,7 @@
       padding: 12px !important;
   }
 }
-/* Enable scrolling inside budget modal */
+ /* Enable scrolling inside budget modal */
 #dt-budgetModal {
     display: none;
     justify-content: center;
@@ -790,17 +853,166 @@
     flex: 1;
 }
 
+#web-chatbot-toggle,
+.dt-floating-btn {
+    right: 12px !important;
+}
+#reviewsSlider {
+    scroll-snap-type: x mandatory;
+}
+
+.review-card {
+    scroll-snap-align: center;
+}
+
+/* ============================================
+   FINAL FLOATING BUTTON ALIGNMENT (OVERWRITE ALL)
+   ============================================ */
+
+:root {
+  --float-right: 20px;
+  --float-gap: 14px;
+  --float-size: 62px;
+}
+
+/* Chatbot Button – bottom-most */
+#web-chatbot-toggle {
+  position: fixed !important;
+  right: var(--float-right) !important;
+  bottom: 24px !important;
+  width: var(--float-size) !important;
+  height: var(--float-size) !important;
+  border-radius: 50%;
+  z-index: 6000 !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Budget Button – sits ABOVE the chat button */
+#dt-floatingBudgetBtn {
+  position: fixed !important;
+  right: var(--float-right) !important;
+  bottom: calc(24px + var(--float-size) + var(--float-gap)) !important;
+  width: var(--float-size) !important;
+  height: var(--float-size) !important;
+  border-radius: 50%;
+  z-index: 6100 !important;
+}
+
+/* ---- MOBILE FIXES ---- */
+@media (max-width: 600px) {
+  :root {
+    --float-right: 16px;
+    --float-size: 54px;
+  }
+
+  #web-chatbot-toggle {
+    bottom: 20px !important;
+  }
+
+  #dt-floatingBudgetBtn {
+    bottom: calc(20px + var(--float-size) + var(--float-gap)) !important;
+  }
+}
+/* ===================== GLOBAL ENQUIRE BUTTON ===================== */
+#global-enquiry-btn {
+    position: fixed;
+    top: 28px;            /* moved slightly down */
+    right: 22px;
+    padding: 10px 20px;
+    background: linear-gradient(90deg, #00ffd0, #00ff88);
+    color: #000;
+    border-radius: 30px;
+    font-weight: 600;
+    z-index: 5000;
+    box-shadow: 0px 5px 14px rgba(0,0,0,0.28);
+    font-size: 14px;
+}
+
+#global-enquiry-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
+}
+
+/* MOBILE RESPONSIVE */
+@media (max-width: 480px) {
+    #global-enquiry-btn {
+        top: 14px;
+        right: 14px;
+        padding: 10px 18px;
+        font-size: 14px;
+    }
+}
+.enquire-btn {
+    display: none;
+}
+/* Better spacing for slides without bottom button */
+.slide {
+    padding: 18px 14px 30px !important; /* reduce bottom padding from 80px */
+}
+
+.slide-content {
+    margin-top: 12px;
+    text-align: left;
+}
+
+.img-wrap img {
+    border-radius: 14px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+}
+/* ======================= FIX REVIEW SLIDER ALIGNMENT ======================= */
+
+.reviews-slider {
+    display: flex;
+    gap: 18px;
+    padding: 10px 0;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+}
+
+.review-card {
+    flex: 0 0 80%;                 /* card width scales with screen */
+    max-width: 340px;              /* keeps on-center size clean */
+    scroll-snap-align: center;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.12);
+    padding: 20px;
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255,255,255,0.18);
+}
+
+/* Remove the weird left gap you have */
+#reviewsSlider {
+    padding-left: 0 !important;
+}
+.location-heading {
+    text-align: center;
+    margin-top: 18px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+}
+
 
   </style>
 </head>
 <body>
+  <!-- Global Enquire Button (Top Right Floating) -->
+<button id="global-enquiry-btn" onclick="openEnquiry('General Enquiry')">
+    Enquire Now
+</button>
+
+  <div class="background-overlay"></div>
   <div class="top-left-logo">
     <img src="{% static 'images/logo.png' %}" alt="Dream Travellers Logo">
   </div>
 
   <section class="hero">
     <div class="hero-content">
-      <h1>Explore The World</h1>
+      <h1>Explore The INDIAN CULTURE</h1>
       <div class="tagline">Discover unforgettable journeys crafted just for you</div>
     </div>
   </section>
@@ -810,7 +1022,7 @@
     <div class="card">
       <h2 class="title"><i class="fa-solid fa-building"></i> About Us</h2>
       <p>We are group of Travel Enthusiast providing customisable travel package for God's Own Country (Kerala).
-      Your travel will be curated as per your needs. We operate from Kannur, Surat, Coimbatore and Pune. Let us make your travel dreams come true!
+      Your travel will be curated as per your needs.Let us make your travel dreams come true!
       </p>
     </div>
 
@@ -870,6 +1082,26 @@
             <button class="enquire-btn" onclick="openEnquiry('Kannur – Coorg – Mysore – Wayanad – Calicut')">Enquire Now</button>
           </div>
 
+          <!-- Slide 6 -->
+          <div class="slide">
+            <div class="img-wrap"><img src="{% static 'images/pack6.jpg' %}" alt="Pack 6"></div>
+            <div class="slide-content">
+              <h3>Enquiry Based Bookings To Other States</h3>
+              <p>Rajasthan - Gujarat - Punjab - Delhi -Jammu & Kashmir</p> 
+            </div>
+            <button class="enquire-btn" onclick="openEnquiry('Rajasthan - Gujarat - Punjab - Delhi -Jammu & Kashmir')">Enquire Now</button>
+          </div>
+
+           <!-- Slide 7-->
+          <div class="slide">
+            <div class="img-wrap"><img src="{% static 'images/pack7.jpg' %}" alt="Pack 6"></div>
+            <div class="slide-content">
+              <h3>Day Tour - Group Packages - Couple Package - Honeymoon Package</h3>
+              <p>Enquiry Based Bookings To All Destinations In Kerala</p>
+            </div>
+            <button class="enquire-btn" onclick="openEnquiry('Rajasthan - Gujarat - Punjab - Delhi -Jammu & Kashmir')">Enquire Now</button>
+          </div>
+
         </div> <!-- end track -->
 
         <div class="carousel-dots" id="carouselDots" aria-hidden="false"></div>
@@ -881,21 +1113,21 @@
 
   <!-- Floating Quick Icons -->
   <div class="contact-floating-icons">
-    <a href="tel:+919745298377" class="c-icon"><i class="fa-solid fa-phone"></i></a>
+    <a href="tel:+916282332791" class="c-icon"><i class="fa-solid fa-phone"></i></a>
     <a href="https://mail.google.com/mail/?view=cm&fs=1&to=dreamtravellers.ta@gmail.com" target="_blank" class="c-icon"><i class="fa-solid fa-envelope"></i></a>
-    {% comment %} <a href="https://dreamtravellers.onrender.com" target="_blank" class="c-icon"> {% endcomment %}
-      {% comment %} <i class="fa-solid fa-globe"></i> {% endcomment %}
-    </a>
-    {% comment %} <a href="https://wa.me/919745298377" target="_blank" class="c-icon">
-      <i class="fa-brands fa-whatsapp"></i>
-    </a> {% endcomment %}
+    {% comment %} <a href="https://dreamtravellers.onrender.com" target="_blank" class="c-icon">
+     <i class="fa-solid fa-globe"></i>
+     </a> {% endcomment %}
+     {% comment %} <a href="https://wa.me/919745298377" target="_blank" class="c-icon"> 
+    <i class="fa-brands fa-whatsapp"></i> 
+     </a> {% endcomment %}
   </div>
 
   <!-- Premium Glass QR -->
   <div class="enhanced-qr-square">
     <div class="qr-glass-square"></div>
     <img src="{% static 'images/contact-qr.png' %}" alt="WhatsApp QR">
-  </div>
+  </div> 
 
   {% comment %} <!-- Contact Info -->
   <div class="contact-mini">
@@ -905,6 +1137,7 @@
   </div> {% endcomment %}
 
   <!-- Locations -->
+   <div class="location-heading">Operating Locations</div>
   <div class="location-pills">
     <span>Kannur</span>
     <span>Surat</span>
@@ -1305,9 +1538,9 @@
     const res = calculateBudget();
     try{
       // safe-guard: try several possible IDs (your page has different IDs in different versions)
-      const possibleNights = [ 'nights', 'Calcnights', 'dt-nights' ];
-      const possibleAdults = [ 'adults', 'Calcadults', 'dt-adults' ];
-      const possibleChildren = [ 'children', 'Calcchildren', 'dt-children' ];
+      const possibleNights = [ 'Calcnights', 'nights', 'dt-nights' ];
+      const possibleAdults = [ 'Calcadults', 'adults', 'dt-adults' ];
+      const possibleChildren = [ 'Calcchildren', 'children', 'dt-children' ];
 
       let setOne = false;
       // nights
@@ -1413,7 +1646,7 @@
 
   // WhatsApp opener
   function openWhatsApp(packageName){
-    const phone = "918714558566";
+    const phone = "919745298377";
     const msg = `Hello, I am interested in the ${packageName} package. Please share more details.`;
     window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, "_blank");
   }
@@ -1603,7 +1836,7 @@
     messages.appendChild(wrap);
     scrollToBottom(messages);
 
-    ok.onclick = ()=>{
+    ok.onclick = ()=>{ 
       const val = (field.value || "").trim();
       if(ask.inputType === "phone" && val && !/^\d{10}$/.test(val)){ alert("Please enter a valid 10-digit mobile number."); return; }
       if((ask.chatKey === "name" || ask.chatKey === "phone" || ask.chatKey === "location") && !val){ alert("This field is required."); return; }
@@ -1612,7 +1845,7 @@
       // set modal input if available
       const idMap = {
         name:"name", phone:"phone", selected_package:"selectedPackage", starting_location:"startingLocation",
-        travel_date:"travelDate", travel_group:"travelGroup", nights:"nights", adults:"adults", children:"children",
+        travel_date:"travelDate", travel_group:"travelGroup", nights:"Calcnights", adults:"Calcadults", children:"Calcchildren",
         hotel_category:"hotelCategory", transportation:"transportation", extra_requirement:"extraRequirement", email:"email"
       };
       const el = document.getElementById(idMap[ask.mapTo] || ask.mapTo);
@@ -1668,9 +1901,9 @@
               starting_location:"startingLocation",
               travel_date:"travelDate",
               travel_group:"travelGroup",
-              nights:"nights",
-              adults:"adults",
-              children:"children",
+              nights:"Calcnights",
+              adults:"Calcadults",
+              children:"Calcchildren",
               hotel_category:"hotelCategory",
               transportation:"transportation",
               extra_requirement:"extraRequirement",
@@ -1776,9 +2009,9 @@
           starting_location:"startingLocation",
           travel_date:"travelDate",
           travel_group:"travelGroup",
-          nights:"nights",
-          adults:"adults",
-          children:"children",
+          nights:"Calcnights",
+          adults:"Calcadults",
+          children:"Calcchildren",
           hotel_category:"hotelCategory",
           transportation:"transportation",
           extra_requirement:"extraRequirement",
@@ -1892,16 +2125,48 @@
   window._dt = { goToSlide, resetCarouselTimer, openWhatsApp, populateLocationOptionsFromSlides };
 
   document.addEventListener("DOMContentLoaded", ()=>{ startApp(); refreshSummaryFromForm(); });
+
+// ===================== AUTO SLIDE FOR REVIEWS ===================== //
+/* ===================== FIXED REVIEW AUTO SLIDER ===================== */
+/* ===================== FIXED REVIEW AUTO-SLIDER ===================== */
+document.addEventListener("DOMContentLoaded", () => {
+    const slider = document.getElementById("reviewsSlider");
+    if (!slider) return;
+
+    let cards = Array.from(slider.querySelectorAll(".review-card"));
+    if (cards.length <= 1) return;
+
+    /* Duplicate cards to create infinite loop illusion */
+    cards.forEach(card => {
+        const clone = card.cloneNode(true);
+        slider.appendChild(clone);
+    });
+
+    cards = slider.querySelectorAll(".review-card");
+    let index = 0;
+
+    function goToReview(i) {
+        index = i;
+        const card = cards[index];
+        const left = card.offsetLeft - (slider.clientWidth - card.offsetWidth) / 2;
+        slider.scrollTo({ left, behavior: "smooth" });
+    }
+
+    function nextReview() {
+        index++;
+        if (index >= cards.length) {
+            index = 0;
+        }
+        goToReview(index);
+    }
+
+    let timer = setInterval(nextReview, 3000);
+
+    slider.addEventListener("mouseenter", () => clearInterval(timer));
+    slider.addEventListener("mouseleave", () => timer = setInterval(nextReview, 3000));
+});
+
+
   </script>
 </body>
-</html>  
-
-
-
-
-
-
-
-
-
-
+</html>
