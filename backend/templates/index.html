@@ -995,6 +995,45 @@ body {
     font-weight: 600;
     color: rgba(255,255,255,0.9);
 }
+/* --- FIX CHATBOT ALIGNMENT ON MOBILE --- */
+@media (max-width: 600px) {
+
+    /* Chatbot window */
+    #web-chatbot {
+        width: 92vw !important;   /* fits mobile perfectly */
+        right: 4% !important;     /* stays inside the screen */
+        left: unset !important;
+        bottom: 90px !important;  /* above floating buttons */
+        border-radius: 14px;
+    }
+
+    /* Chatbot toggle icon */
+    #web-chatbot-toggle {
+        right: 16px !important;
+        bottom: 16px !important;
+        width: 56px !important;
+        height: 56px !important;
+        font-size: 22px !important;
+    }
+
+    /* Floating budget button */
+    #dt-floatingBudgetBtn {
+        right: 16px !important;
+        bottom: 120px !important; /* stacked properly */
+        width: 56px !important;
+        height: 56px !important;
+    }
+
+    /* Message bubbles adjust */
+    .bubble {
+        max-width: 88% !important;
+        font-size: 14px;
+    }
+
+    #chat-input-area {
+        padding: 8px !important;
+    }
+}
 
 
   </style>
