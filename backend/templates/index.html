@@ -1034,6 +1034,12 @@ body {
         padding: 8px !important;
     }
 }
+/* Disable fixed background on iPhone Safari */
+@supports (-webkit-touch-callout: none) {
+    body {
+        background-attachment: scroll !important;
+    }
+}
 
 
   </style>
