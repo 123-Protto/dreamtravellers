@@ -1036,6 +1036,20 @@ body {
     }
 }
 
+.modal-box {
+    flex-direction: column !important; /* so only left side shows */
+}
+
+.modal-left {
+    width: 100% !important;
+    border-right: none !important;
+    padding: 24px !important;
+}
+
+.modal-right {
+    display: none !important; /* hide summary if any remnants remain */
+}
+
   </style>
 </head>
 <body>
@@ -1339,31 +1353,6 @@ body {
             </div>
           </div>
         </form>
-      </div>
-
-      <!-- Right summary panel -->
-      <div class="modal-right">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-          <div class="summary-title">Trip Summary</div>
-          <div style="font-size:12px;color:var(--muted)">Preview</div>
-        </div>
-
-        <div class="summary-card" id="tripSummaryCard">
-          <div class="summary-package" id="summaryPackage">— No package selected —</div>
-          <div class="summary-row"><div>Start</div><div id="summaryStart">—</div></div>
-          <div class="summary-row"><div>Date</div><div id="summaryDate">—</div></div>
-          <div class="summary-row"><div>Nights</div><div id="summaryNights">—</div></div>
-          <div class="summary-row"><div>Adults</div><div id="summaryAdults">—</div></div>
-          <div class="summary-row"><div>Children</div><div id="summaryChildren">—</div></div>
-          <div class="summary-row"><div>Hotel</div><div id="summaryHotel">—</div></div>
-          <div class="summary-row"><div>Transport</div><div id="summaryTransport">—</div></div>
-          <div style="margin-top:12px;font-size:13px;color:var(--muted)">Notes</div>
-          <div style="font-size:13px;margin-top:6px;color:#fff" id="summaryNotes">—</div>
-        </div>
-
-        <div style="margin-top:14px">
-          <button class="btn-primary" style="width:100%;margin-top:12px" onclick="openWhatsAppFromSummary()">Enquire on WhatsApp</button>
-        </div>
       </div>
     </div>
   </div>
