@@ -1118,6 +1118,58 @@ body {
         white-space: nowrap;
     }
 }
+/* Make chatbot bubbles fit the screen on mobile */
+@media (max-width: 600px) {
+    .bubble {
+        width: 95% !important;
+        max-width: 95% !important;
+        margin: 8px auto !important;
+    }
+}
+/* Fix chatbot inline form layout */
+@media (max-width: 600px) {
+
+    .inline-form {
+        width: 100% !important;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 8px;
+    }
+
+    .inline-form input {
+        width: 100% !important;
+        padding: 12px;
+        border-radius: 10px;
+        font-size: 15px;
+        border: 1px solid #ccc;
+    }
+
+    /* Button row */
+    .inline-form .button-row,
+    .inline-form div {
+        width: 100% !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        gap: 10px;
+    }
+
+    /* Buttons */
+    .inline-form button {
+        flex: 1 !important;
+        padding: 12px 0 !important;
+        border-radius: 10px !important;
+        font-size: 15px !important;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+}
+@media (max-width: 600px) {
+    #web-chatbot-input-area {
+        padding: 10px 12px !important;
+        height: auto !important;
+    }
+}
 
 
   </style>
