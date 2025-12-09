@@ -18,7 +18,6 @@ html, body {
     max-width: 100% !important;
     overflow-x: hidden !important;
     margin: 0;
-    height: 100%;
     overflow-x: hidden !important;
     font-family: 'Poppins', sans-serif;
 }
@@ -50,7 +49,6 @@ body {
 
   html, body {
     margin: 0;
-    height: 100%;
     font-family: 'Poppins', sans-serif;
     overflow-x: hidden;
     color: #fff;
@@ -247,6 +245,12 @@ body {
 }
 
 /* Mobile Fix */
+@media (max-width: 1024px) {
+  body {
+    background-attachment: scroll !important;
+  }
+}
+
 @media (max-width: 480px) {
   #web-chatbot {
     width: 95vw;
@@ -264,7 +268,7 @@ body {
 
   /* Modal & Form - Travel Theme (D) */
   .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);backdrop-filter:blur(4px);display:none;justify-content:center;align-items:center;z-index:9999}
-  .modal-box{width:94%;max-width:920px;max-height:90vh;overflow:hidden;background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));border-radius:18px;padding:0;border:1px solid rgba(255,255,255,0.08);display:flex;align-items:stretch}
+  .modal-box{width:94%;max-width:920px;max-height:90vh;overflow-y: auto !important;-webkit-overflow-scrolling: touch !important;background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));border-radius:18px;padding:0;border:1px solid rgba(255,255,255,0.08);display:flex;align-items:stretch}
   .modal-left, .modal-right{padding:22px;overflow:auto}
   .modal-left{flex:1 1 60%;border-right:1px solid rgba(255,255,255,0.04)}
   .modal-right{width:320px;background:rgba(0,0,0,0.04);flex:0 0 320px;border-left:1px solid rgba(255,255,255,0.03)}
@@ -649,12 +653,12 @@ body {
     font-size:24px;
   }
 
-  .dt-floating-btn {
+  {% comment %} .dt-floating-btn {
     right:16px;
     bottom:146px;
     width:56px;
     height:56px;
-  }
+  } {% endcomment %}
 
   /* Contact */
   .c-icon { width:44px; height:44px; font-size:18px; }
@@ -688,13 +692,13 @@ body {
     font-size:22px;
   }
 
-  .dt-floating-btn {
+  {% comment %} .dt-floating-btn {
     right:12px;
     bottom:170px;
     width:52px;
     height:52px;
     font-size:22px;
-  }
+  } {% endcomment %}
 
   .field { padding:10px; }
 
@@ -754,7 +758,7 @@ body {
 }
 
 
-/* ================== FIX BUDGET CALCULATOR RESPONSIVENESS ================== */
+{% comment %} /* ================== FIX BUDGET CALCULATOR RESPONSIVENESS ================== */
 
 /* Tablet & small laptop fixes */
 @media (max-width: 992px) {
@@ -874,31 +878,22 @@ body {
   --float-right: 20px;
   --float-gap: 14px;
   --float-size: 62px;
-}
+} {% endcomment %}
 
-/* Chatbot Button – bottom-most */
 #web-chatbot-toggle {
-  position: fixed !important;
-  right: var(--float-right) !important;
-  bottom: 24px !important;
-  width: var(--float-size) !important;
-  height: var(--float-size) !important;
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
-  z-index: 6000 !important;
+  background: linear-gradient(135deg, var(--accent2), var(--accent1));
   display: flex;
-  justify-content: center;
   align-items: center;
-}
-
-/* Budget Button – sits ABOVE the chat button */
-#dt-floatingBudgetBtn {
-  position: fixed !important;
-  right: var(--float-right) !important;
-  bottom: calc(24px + var(--float-size) + var(--float-gap)) !important;
-  width: var(--float-size) !important;
-  height: var(--float-size) !important;
-  border-radius: 50%;
-  z-index: 6100 !important;
+  justify-content: center;
+  font-size: 28px;
+  cursor: pointer;
+  z-index: 5000;
 }
 
 /* ---- MOBILE FIXES ---- */
@@ -911,10 +906,10 @@ body {
   #web-chatbot-toggle {
     bottom: 20px !important;
   }
-
+{% comment %} 
   #dt-floatingBudgetBtn {
     bottom: calc(20px + var(--float-size) + var(--float-gap)) !important;
-  }
+  } {% endcomment %}
 }
 /* ===================== GLOBAL ENQUIRE BUTTON ===================== */
 #global-enquiry-btn {
@@ -1018,12 +1013,12 @@ body {
     }
 
     /* Floating budget button */
-    #dt-floatingBudgetBtn {
+    {% comment %} #dt-floatingBudgetBtn {
         right: 16px !important;
         bottom: 120px !important; /* stacked properly */
         width: 56px !important;
         height: 56px !important;
-    }
+    } {% endcomment %}
 
     /* Message bubbles adjust */
     .bubble {
@@ -1388,7 +1383,7 @@ body {
       <p class="footer-copy">© 2025 Dream Travellers • All Rights Reserved</p>
     </div>
   </footer>
-<!-- Premium Budget Calculator — drop this block near the end of your <body> (after enquiry modal) -->
+{% comment %} <!-- Premium Budget Calculator — drop this block near the end of your <body> (after enquiry modal) -->
 <!-- This is a self-contained premium calculator: HTML + CSS + JS. IDs prefixed with dt- to avoid clashes. -->
 <div id="dt-budgetModal" class="dt-budget-overlay" aria-hidden="true" role="dialog" aria-labelledby="dt-budgetTitle">
   <div class="dt-budget-box">
@@ -1459,10 +1454,10 @@ body {
 </div>
 
 <!-- Floating trigger button -->
-<button id="dt-floatingBudgetBtn" class="dt-floating-btn" aria-controls="dt-budgetModal" aria-expanded="false" title="Open budget planner">💰</button>
+<button id="dt-floatingBudgetBtn" class="dt-floating-btn" aria-controls="dt-budgetModal" aria-expanded="false" title="Open budget planner">💰</button> {% endcomment %}
 
 <style>
-/* Scoped premium styles (prefix dt- ) */
+{% comment %} /* Scoped premium styles (prefix dt- ) */
 .dt-budget-overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:linear-gradient(180deg, rgba(2,6,23,0.6), rgba(2,6,23,0.6));backdrop-filter:blur(8px);z-index:7000}
 .dt-budget-box{width:92%;max-width:980px;border-radius:18px;background:linear-gradient(180deg, rgba(8,12,20,0.95), rgba(6,10,18,0.98));border:1px solid rgba(255,255,255,0.06);box-shadow:0 10px 40px rgba(0,0,0,0.6);overflow:hidden;color:#fff;font-family:inherit}
 .dt-budget-header{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid rgba(255,255,255,0.03)}
@@ -1488,11 +1483,11 @@ body {
 .dt-floating-btn:focus{outline:3px solid rgba(255,255,255,0.12)}
 
 /* Responsive */
-@media (max-width:880px){.dt-budget-main{flex-direction:column}.dt-right{width:100%}}
+@media (max-width:880px){.dt-budget-main{flex-direction:column}.dt-right{width:100%}} {% endcomment %}
 </style>
 
 <script>
-(function(){
+{% comment %} (function(){
   // helpers
   const qs = id => document.getElementById(id);
   const money = n => '₹' + Number(n).toLocaleString('en-IN');
@@ -1598,7 +1593,7 @@ body {
 
   // expose to window for debugging
   window.dtBudget = { openBudget, closeBudget, calculateBudget, applyToEnquiry };
-})();
+})(); {% endcomment %}
 </script>
 <!-- End premium calculator -->
 
