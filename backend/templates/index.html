@@ -1052,10 +1052,34 @@ body {
     background-position: center !important;
   }
 }
+/* TRUE FIXED BACKGROUND FOR MOBILE */
+.mobile-fixed-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+
+    background: 
+        linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
+        url("{% static 'images/bgp.jpg' %}") center/cover no-repeat;
+
+    z-index: -2;
+    pointer-events: none;
+
+    /* ensures crisp display on iOS */
+    transform: translateZ(0);
+}
+
+/* Remove old background on body */
+body {
+    background: none !important;
+}
 
   </style>
 </head>
 <body>
+  <div class="mobile-fixed-bg"></div>
   <!-- Global Enquire Button (Top Right Floating) -->
 <button id="global-enquiry-btn" onclick="openEnquiry('General Enquiry')">
     Enquire Now
