@@ -36,6 +36,7 @@ def chat_reply(request):
 
 
 # ---------------- SAVE ENQUIRY API ---------------- #
+# ---------------- SAVE ENQUIRY API ---------------- #
 @csrf_exempt
 def save_enquiry(request):
     if request.method != "POST":
@@ -62,11 +63,8 @@ def save_enquiry(request):
             phone=data.get("phone", ""),
             email=data.get("email", ""),
 
-            # Package info
-            selected_package=data.get("selected_package", ""),
-
             # Travel details
-            starting_location=data.get("starting_location", ""),
+            planned_destination=data.get("planned_destination", ""),
             travel_date=travel_date,
             travel_group=data.get("travel_group", ""),
 
@@ -84,3 +82,4 @@ def save_enquiry(request):
 
     except Exception as e:
         return JsonResponse({"status": "error", "message": str(e)}, status=500)
+

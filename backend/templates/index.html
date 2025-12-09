@@ -1300,7 +1300,8 @@ body {
 
   <!-- Floating Quick Icons -->
   <div class="contact-floating-icons">
-    <a href="tel:+916282332791" class="c-icon"><i class="fa-solid fa-phone"></i></a>
+    <a href="tel:+916282332791,+919745298377" class="c-icon"><i class="fa-solid fa-phone"></i></a>
+    <a href="tel:+919745298377" class="c-icon"><i class="fa-solid fa-phone"></i></a>
     <a href="https://mail.google.com/mail/?view=cm&fs=1&to=dreamtravellers.ta@gmail.com" target="_blank" class="c-icon"><i class="fa-solid fa-envelope"></i></a>
     {% comment %} <a href="https://dreamtravellers.onrender.com" target="_blank" class="c-icon">
      <i class="fa-solid fa-globe"></i>
@@ -1403,7 +1404,7 @@ body {
             <div class="field-row">
               <div class="field" style="flex:1 1 60%">
                 <i class="fa-solid fa-map-location-dot"></i>
-                <input id="selectedPackage" name="selected_package" type="text" placeholder="Selected package" readonly>
+                <input id="plannedDestination" name="planned_destination" type="text" placeholder="Planned destination *" required >
               </div>
               <div class="field" style="flex:1 1 40%">
                 <i class="fa-solid fa-location-arrow"></i>
@@ -1433,15 +1434,15 @@ body {
             <div class="field-row">
               <div class="field">
                 <i class="fa-solid fa-moon"></i>
-                <input id="Calcnights" name="nights" type="number" placeholder="Nights *" required min="1">
+                <input id="Calcnights" name="nights" type="number" placeholder="No Of Nights *" required min="1">
               </div>
               <div class="field">
                 <i class="fa-solid fa-user-check"></i>
-                <input id="Calcadults" name="adults" type="number" placeholder="Adults *" required min="1" value="1">
+                <input id="Calcadults" name="adults" type="number" placeholder="Adults(Age: 10+ years) *" required min="1" value="1">
               </div>
               <div class="field">
                 <i class="fa-solid fa-child"></i>
-                <input id="Calcchildren" name="children" type="number" placeholder="Children" min="0" value="0">
+                <input id="Calcchildren" name="children" type="number" placeholder="Children(Age: 6-10 years)" min="0" value="0">
               </div>
             </div>
           </div>
@@ -1455,8 +1456,7 @@ body {
                 <i class="fa-solid fa-hotel"></i>
                 <select id="hotelCategory" name="hotel_category" required style="background:transparent;border:none">
                   <option value="">Hotel category *</option>
-                  <option>Budget</option>
-                  <option>2 Star</option>
+                  <option>Budget/2 Star</option>
                   <option>3 Star</option>
                   <option>4 Star</option>
                   <option>5 Star</option>
@@ -1493,10 +1493,8 @@ body {
   <footer class="footer">
     <div class="footer-content">
       <h2>Dream Travellers</h2>
-      <p>Explore the world with personalized travel plans</p>
-
       <div class="reviews-box">
-        <h3>What Our Customers Say</h3>
+        <h3>What Our Travellers Say</h3>
         <div class="reviews-slider" id="reviewsSlider">
           <div class="review-card">
             <p class="review-text">"Dream travellers made my dream come true. They planned a perfect offbeat Kerala experience…"</p>
@@ -1514,7 +1512,7 @@ body {
       </div>
 
       <div class="footer-social">
-        <a href="https://facebook.com/YOUR_PAGE" target="_blank" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+        {% comment %} <a href="https://facebook.com/YOUR_PAGE" target="_blank" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a> {% endcomment %}
         <a href="https://instagram.com/dreamtravellers_ta" target="_blank" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
         <a href="https://wa.me/919745298377" target="_blank" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
         <a href="https://maps.app.goo.gl/X29RLb1d9UgZv2hS7?g_st=aw" 
@@ -1825,11 +1823,11 @@ body {
 
   // Chatbot & formValues
   const API_BASE = window.location.origin; // use same host by default
-  const formValues = {
+ const formValues = {
     name: "",
     phone: "",
     email: "",
-    selected_package: "",
+    planned_destination: "",   // ✅ ADD THIS
     starting_location: "",
     travel_date: "",
     travel_group: "",
@@ -1839,7 +1837,26 @@ body {
     hotel_category: "",
     transportation: "",
     extra_requirement: ""
-  };
+};
+const idMap = {
+    name: "name",
+    phone: "phone",
+    email: "email",
+
+    planned_destination: "plannedDestination",
+    starting_location: "startingLocation",
+    travel_date: "travelDate",
+    travel_group: "travelGroup",
+    nights: "Calcnights",
+    adults: "Calcadults",
+    children: "Calcchildren",
+
+    hotel_category: "hotelCategory",
+    transportation: "transportation",
+    extra_requirement: "extraRequirement",
+
+};
+
 
   const chatWin = document.getElementById("web-chatbot");
   const toggleBtn = document.getElementById("web-chatbot-toggle");
@@ -1916,16 +1933,7 @@ body {
         if(mapTo) {
           formValues[mapTo] = opt;
           // prefill modal field if present
-          const idMap = {
-            selected_package: "selectedPackage",
-            starting_location: "startingLocation",
-            travel_group: "travelGroup",
-            nights: "Calcnights",
-            adults: "Calcadults",
-            children: "Calcchildren",
-            hotel_category: "hotelCategory",
-            transportation: "transportation"
-          };
+         
           const el = document.getElementById(idMap[mapTo] || mapTo);
           if(el) el.value = opt;
         }
@@ -1946,12 +1954,12 @@ body {
     const required = [
       {chatKey:"name", label:"Please tell me your name.", mapTo:"name"},
       {chatKey:"phone", label:"Please enter your 10-digit mobile number.", mapTo:"phone", inputType:"phone"},
-      {chatKey:"location", label:"Select the package you want to enquire", mapTo:"selected_package", type:"options", options: LOCATION_OPTIONS},
+      {chatKey:"location", label:"Please enter your destination", mapTo:"planned_destination"},
       {chatKey:"nights", label:"How many nights?", mapTo:"nights", type:"options", options:["1","2","3","4","5","6","7","8","9","10"]},
-      {chatKey:"adults", label:"How many adults?", mapTo:"adults", type:"options", options:["1","2","3","4","5","6","7","8"]},
-      {chatKey:"children", label:"How many children?", mapTo:"children", type:"options", options:["0","1","2","3","4"]},
+      {chatKey:"adults", label:"How many adults?", mapTo:"adults", type:"options", options:["1","2","3","4","5","6","7",">7"]},
+      {chatKey:"children", label:"How many children?", mapTo:"children", type:"options", options:["0","1","2","3","4",">4"]},
       {chatKey:"date", label:"What is your travel date?", mapTo:"travel_date", inputType:"date"},
-      {chatKey:"hotel", label:"Preferred hotel category?", mapTo:"hotel_category", type:"options", options:["Budget","2 star","3 Star","4 Star","5 Star"]},
+      {chatKey:"hotel", label:"Preferred hotel category?", mapTo:"hotel_category", type:"options", options:["Budget/2 Star","3 Star","4 Star","5 Star"]},
       {chatKey:"travelWith", label:"Who are you travelling with?", mapTo:"travel_group", type:"options", options:["Family","Friends","Bachelors","Honeymoon","Corporate","Other"]}
     ];
 
@@ -1996,8 +2004,8 @@ body {
     btnRow.style.marginTop="8px"; btnRow.style.display="flex"; btnRow.style.gap="8px";
 
     const ok = document.createElement("button"); ok.className="action-btn"; ok.textContent="OK";
-    const skip = document.createElement("button"); skip.className="action-btn"; skip.style.background="#ff6b6b"; skip.textContent="Skip";
-    btnRow.appendChild(ok); btnRow.appendChild(skip);
+    
+    btnRow.appendChild(ok); 
     formNode.appendChild(btnRow);
     bubble2.appendChild(formNode);
     wrap.appendChild(bubble2);
@@ -2011,21 +2019,10 @@ body {
 
       formValues[ask.mapTo] = val;
       // set modal input if available
-      const idMap = {
-        name:"name", phone:"phone", selected_package:"selectedPackage", starting_location:"startingLocation",
-        travel_date:"travelDate", travel_group:"travelGroup", nights:"Calcnights", adults:"Calcadults", children:"Calcchildren",
-        hotel_category:"hotelCategory", transportation:"transportation", extra_requirement:"extraRequirement", email:"email"
-      };
+    
       const el = document.getElementById(idMap[ask.mapTo] || ask.mapTo);
       if(el) el.value = val;
       appendUser(val || "(skipped)");
-      wrap.remove();
-      handleMissingFields();
-    };
-
-    skip.onclick = ()=>{
-      if(ask.chatKey === "name" || ask.chatKey === "phone" || ask.chatKey === "location"){ alert("Please provide this info (required)."); return; }
-      appendUser("(skipped)");
       wrap.remove();
       handleMissingFields();
     };
@@ -2035,7 +2032,7 @@ body {
     const lines = [
       `Name: ${formValues.name || "Not provided"}`,
       `Phone: ${formValues.phone || "Not provided"}`,
-      `Package: ${formValues.selected_package || "Not provided"}`,
+      `Planned Destination: ${formValues.planned_destination || "Not provided"}`,
       `Nights: ${formValues.nights || "Not provided"}`,
       `Persons: ${formValues.adults || "N/A"} adults, ${formValues.children || "N/A"} children`,
       `Date: ${formValues.travel_date || "Not specified"}`,
@@ -2046,11 +2043,39 @@ body {
   <b>Preview your enquiry</b><br><br>
   ${lines.join("<br>")}<br><br>
 
-  <div class="preview-buttons">
-      <button class="action-btn" id="open-modal-from-chat">Open Enquiry Form</button>
-      <button class="action-btn" id="send-wa-chat" style="background:#25D366;color:#003;">Send WhatsApp</button>
-  </div>
+<div class="preview-buttons">
+    <button class="action-btn" id="submit-chat-enquiry" style="background:#00ffbf;color:#003;">Submit Enquiry</button>
+</div>
+
 `;
+async function submitChatbotEnquiry() {
+    try {
+        const res = await fetch(API_BASE + "/api/save-enquiry/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": CSRFTOKEN
+            },
+            body: JSON.stringify(formValues)
+        });
+
+        const data = await res.json().catch(() => ({status:"error"}));
+
+        if(res.ok && data.status === "ok"){
+            const successBubble = appendBotBubbleEmpty();
+            await typeIntoBubble(successBubble, "🎉 Your enquiry has been submitted successfully!\nOur team will contact you shortly.");
+            
+            // Reset chatbot for next enquiry
+            Object.keys(formValues).forEach(k => formValues[k] = "");
+
+            return;
+        } else {
+            alert("Error saving enquiry: " + (data.message || "Unknown error"));
+        }
+    } catch(err){
+        alert("Network error: " + err.message);
+    }
+}
 
 
     const wrap = document.createElement("div");
@@ -2064,29 +2089,18 @@ body {
         openBtn.onclick = ()=>{
           // prefill modal fields from formValues
           Object.keys(formValues).forEach(k=>{
-            const idMap = {
-              selected_package:"selectedPackage",
-              starting_location:"startingLocation",
-              travel_date:"travelDate",
-              travel_group:"travelGroup",
-              nights:"Calcnights",
-              adults:"Calcadults",
-              children:"Calcchildren",
-              hotel_category:"hotelCategory",
-              transportation:"transportation",
-              extra_requirement:"extraRequirement",
-              name:"name",
-              phone:"phone",
-              email:"email"
-            };
+           
             const el = document.getElementById(idMap[k] || k);
             if(el) el.value = formValues[k] || "";
           });
-          openEnquiry(formValues.selected_package || "");
+          
         };
       }
-      const waBtn = document.getElementById("send-wa-chat");
-      if(waBtn) waBtn.onclick = sendToWhatsApp;
+       const submitBtn = document.getElementById("submit-chat-enquiry");
+if(submitBtn){
+    submitBtn.onclick = submitChatbotEnquiry;
+}
+
     }, 100);
   }
 
@@ -2104,7 +2118,6 @@ body {
       "New Enquiry:",
       `Name: ${formValues.name || ""}`,
       `Phone: ${formValues.phone || ""}`,
-      `Package: ${formValues.selected_package || ""}`,
       `Nights: ${formValues.nights || ""}`,
       `Persons: Adults ${formValues.adults || ""}, Children ${formValues.children || ""}`,
       `Date: ${formValues.travel_date || "Not specified"}`,
@@ -2165,28 +2178,11 @@ body {
   function openEnquiry(packageName){
     const modal = document.getElementById("enquiryModal");
     if(modal) modal.style.display = "flex";
-    if(packageName){
-      formValues.selected_package = packageName;
-      const pkg = document.getElementById("selectedPackage"); if(pkg) pkg.value = packageName;
-    }
     // prefill form from formValues
     try{
       Object.keys(formValues).forEach(k=>{
-        const idMap = {
-          selected_package:"selectedPackage",
-          starting_location:"startingLocation",
-          travel_date:"travelDate",
-          travel_group:"travelGroup",
-          nights:"Calcnights",
-          adults:"Calcadults",
-          children:"Calcchildren",
-          hotel_category:"hotelCategory",
-          transportation:"transportation",
-          extra_requirement:"extraRequirement",
-          name:"name",
-          phone:"phone",
-          email:"email"
-        };
+
+
         const el = document.getElementById(idMap[k] || k);
         if(el) el.value = formValues[k] || "";
       });
@@ -2209,7 +2205,6 @@ body {
     if(el) el.textContent = value || "—";
   }
   function refreshSummaryFromForm(){
-    updateSummaryField("summaryPackage", document.getElementById("selectedPackage").value);
     updateSummaryField("summaryStart", document.getElementById("startingLocation").value);
     updateSummaryField("summaryDate", document.getElementById("travelDate").value);
     updateSummaryField("summaryNights", document.getElementById("Calcnights").value);
@@ -2239,7 +2234,8 @@ body {
       name: document.getElementById("name").value.trim(),
       phone: document.getElementById("phone").value.trim(),
       email: document.getElementById("email").value.trim(),
-      selected_package: document.getElementById("selectedPackage").value.trim(),
+
+      planned_destination: document.getElementById("plannedDestination").value.trim(),
       starting_location: document.getElementById("startingLocation").value.trim(),
       travel_date: document.getElementById("travelDate").value || null,
       travel_group: document.getElementById("travelGroup").value,
@@ -2275,7 +2271,6 @@ body {
         Object.assign(formValues, payload);
         closeEnquiry();
         document.getElementById("travelFormHtml").reset();
-        document.getElementById("selectedPackage").value = "";
         refreshSummaryFromForm();
       } else {
         alert("Error saving enquiry: " + (data.message || data.detail || "server error"));
