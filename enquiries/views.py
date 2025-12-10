@@ -42,7 +42,6 @@ def save_enquiry(request):
     if request.method != "POST":
         return JsonResponse({"status": "error", "message": "Invalid method"}, status=400)
 
-    # Parse JSON safely
     try:
         data = json.loads(request.body.decode("utf-8"))
     except:
@@ -56,25 +55,23 @@ def save_enquiry(request):
             try:
                 travel_date = datetime.strptime(travel_date_raw, "%Y-%m-%d").date()
             except:
-                travel_date = None  # don't break saving
+                travel_date = None
 
         enquiry = Enquiry.objects.create(
             name=data.get("name", ""),
             phone=data.get("phone", ""),
             email=data.get("email", ""),
 
-            # Travel details
             planned_destination=data.get("planned_destination", ""),
             travel_date=travel_date,
             travel_group=data.get("travel_group", ""),
 
-            nights=int(data.get("nights") or 1),
-            adults=int(data.get("adults") or 1),
-            children=int(data.get("children") or 0),
+            nights=data.get("nights", ""),      # ✅ REMOVE int()
+            adults=data.get("adults", ""),      # ✅ STORE AS TEXT
+            children=data.get("children", ""),  # ✅ STORE AS TEXT
 
             hotel_category=data.get("hotel_category", ""),
             transportation=data.get("transportation", ""),
-
             extra_requirement=data.get("extra_requirement", "")
         )
 

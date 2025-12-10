@@ -1438,11 +1438,11 @@ body {
               </div>
               <div class="field">
                 <i class="fa-solid fa-user-check"></i>
-                <input id="Calcadults" name="adults" type="number" placeholder="Adults(Age: 10+ years) *" required min="1" value="1">
+                <input id="Calcadults" name="adults" type="text" placeholder="Adults(Age: 10+ years) *" required>
               </div>
               <div class="field">
                 <i class="fa-solid fa-child"></i>
-                <input id="Calcchildren" name="children" type="number" placeholder="Children(Age: 6-10 years)" min="0" value="0">
+                <input id="Calcchildren" name="children" type="text" placeholder="Children(Age: 6-10 years)">
               </div>
             </div>
           </div>
@@ -1930,14 +1930,20 @@ const idMap = {
       btn.style.minWidth = "80px";
       btn.onclick = () => {
         // mapTo tells which backend/modal field to set
-        if(mapTo) {
-          formValues[mapTo] = opt;
-          // prefill modal field if present
-         
-          const el = document.getElementById(idMap[mapTo] || mapTo);
-          if(el) el.value = opt;
-        }
-        appendUser(opt);
+       if (mapTo) {
+    let storedValue = opt;
+
+    if (mapTo === "adults" && opt === ">7") storedValue = ">7";
+    if (mapTo === "children" && opt === ">4") storedValue = ">4";
+
+    formValues[mapTo] = storedValue;
+
+    appendUser(opt);
+
+    const el = document.getElementById(idMap[mapTo] || mapTo);
+    if (el) el.value = opt;
+}
+
         wrap.remove();
         handleMissingFields();
       };
@@ -2050,15 +2056,8 @@ const idMap = {
 `;
 async function submitChatbotEnquiry() {
     try {
-        // FIX: Convert >4 to a number
-if (formValues.children === ">4") {
-    formValues.children = 5;  // or any number that represents “more than 4”
-}
-if (formValues.adults === ">7") {
-    formValues.adults = 8;
-}
-
-        const res = await fetch(API_BASE + "/api/save-enquiry/", {
+        
+          const res = await fetch(API_BASE + "/api/save-enquiry/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -2240,10 +2239,8 @@ if(submitBtn){
 
     // --- FIX CHILDREN AND ADULTS WHEN CHATBOT SETS VALUES LIKE ">4" OR ">7" ---
 let childrenValue = document.getElementById("Calcchildren").value.trim();
-if (childrenValue === ">4") childrenValue = 5;   // convert to valid integer
-
 let adultsValue = document.getElementById("Calcadults").value.trim();
-if (adultsValue === ">7") adultsValue = 8;       // convert to valid integer
+
 
 
     const payload = {

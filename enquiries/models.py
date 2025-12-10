@@ -10,8 +10,9 @@ class Enquiry(models.Model):
     travel_group = models.CharField(max_length=100, blank=True)
 
     nights = models.IntegerField(default=1)
-    adults = models.IntegerField(default=1)
-    children = models.IntegerField(default=0)
+    adults = models.CharField(max_length=10, default="1")
+    children = models.CharField(max_length=10, default="0")
+
 
     hotel_category = models.CharField(max_length=100, blank=True)
     transportation = models.CharField(max_length=100, blank=True)
