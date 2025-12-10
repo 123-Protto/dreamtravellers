@@ -17,8 +17,11 @@ DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
-    ".onrender.com",
+    ".onrender.com",            # allows dreamtravellers.onrender.com
+    "dreamtravellers.co.in",
+    "www.dreamtravellers.co.in",
 ]
+
 
 # ================================
 # INSTALLED APPS
