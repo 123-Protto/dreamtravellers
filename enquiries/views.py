@@ -61,7 +61,7 @@ def save_enquiry(request):
             name=data.get("name", ""),
             phone=data.get("phone", ""),
             email=data.get("email", ""),
-
+            starting_location=data.get("starting_location", ""),
             planned_destination=data.get("planned_destination", ""),
             travel_date=travel_date,
             travel_group=data.get("travel_group", ""),

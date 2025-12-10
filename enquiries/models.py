@@ -4,7 +4,7 @@ class Enquiry(models.Model):
     name = models.CharField(max_length=200)
     phone = models.CharField(max_length=20)
     email = models.CharField(max_length=200, blank=True)
-
+    starting_location = models.CharField(max_length=200, blank=True)
     planned_destination= models.CharField(max_length=200, blank=True)
     travel_date = models.DateField(null=True, blank=True)
     travel_group = models.CharField(max_length=100, blank=True)

@@ -5,6 +5,7 @@ from .models import Enquiry
 class EnquiryAdmin(admin.ModelAdmin):
     list_display = (
         'name', 'phone', 
+        'starting_location',
         'planned_destination', 'travel_date',
         'nights', 'adults', 'children',
         'hotel_category', 'transportation',
