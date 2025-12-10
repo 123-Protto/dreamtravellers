@@ -2050,6 +2050,14 @@ const idMap = {
 `;
 async function submitChatbotEnquiry() {
     try {
+        // FIX: Convert >4 to a number
+if (formValues.children === ">4") {
+    formValues.children = 5;  // or any number that represents “more than 4”
+}
+if (formValues.adults === ">7") {
+    formValues.adults = 8;
+}
+
         const res = await fetch(API_BASE + "/api/save-enquiry/", {
             method: "POST",
             headers: {
@@ -2230,6 +2238,14 @@ if(submitBtn){
     btn.disabled = true;
     btn.textContent = "Sending...";
 
+    // --- FIX CHILDREN AND ADULTS WHEN CHATBOT SETS VALUES LIKE ">4" OR ">7" ---
+let childrenValue = document.getElementById("Calcchildren").value.trim();
+if (childrenValue === ">4") childrenValue = 5;   // convert to valid integer
+
+let adultsValue = document.getElementById("Calcadults").value.trim();
+if (adultsValue === ">7") adultsValue = 8;       // convert to valid integer
+
+
     const payload = {
       name: document.getElementById("name").value.trim(),
       phone: document.getElementById("phone").value.trim(),
@@ -2240,8 +2256,8 @@ if(submitBtn){
       travel_date: document.getElementById("travelDate").value || null,
       travel_group: document.getElementById("travelGroup").value,
       nights: document.getElementById("Calcnights").value,
-      adults: document.getElementById("Calcadults").value,
-      children: document.getElementById("Calcchildren").value || 0,
+      adults: adultsValue,          // ← FIX APPLIED HERE
+      children: childrenValue,
       hotel_category: document.getElementById("hotelCategory").value,
       transportation: document.getElementById("transportation").value,
       extra_requirement: document.getElementById("extraRequirement").value.trim()
