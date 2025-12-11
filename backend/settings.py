@@ -123,3 +123,10 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # API KEYS
 # ================================
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
+
+# ================================
+# WHATSAPP CLOUD API SETTINGS
+# ================================
+WHATSAPP_NUMBER_ID = os.getenv("WHATSAPP_NUMBER_ID", "")
+WHATSAPP_API_TOKEN = os.getenv("WHATSAPP_API_TOKEN", "")
+ADMIN_WHATSAPP_NUMBER = "919745298377"   # <-- your WhatsApp number
