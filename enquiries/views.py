@@ -3,11 +3,15 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Enquiry
 from datetime import datetime
-from django.core.mail import send_mail
 from django.conf import settings
 
+import sendgrid
+from sendgrid.helpers.mail import Mail
 
-# ---------------- CHATBOT REPLY API ---------------- #
+
+# -------------------------------------------------------
+#  CHATBOT REPLY API
+# -------------------------------------------------------
 @csrf_exempt
 def chat_reply(request):
     if request.method != "POST":
@@ -29,7 +33,7 @@ def chat_reply(request):
     elif "price" in msg:
         reply = "Prices depend on dates, hotel category & number of travellers. When are you planning to travel?"
     elif "package" in msg:
-        reply = "We offer Kerala, Coorg, Mysore, Kanyakumari, Vagamon and many custom tour packages!"
+        reply = "We offer Kerala | Coorg | Mysore | Kanyakumari | Vagamon and many custom tour packages!"
     else:
         reply = "Thank you! Please share more details so I can help you better."
 
@@ -37,50 +41,59 @@ def chat_reply(request):
 
 
 
-# ---------------- ADMIN EMAIL NOTIFICATION ---------------- #
+# -------------------------------------------------------
+#  SENDGRID EMAIL NOTIFICATION
+# -------------------------------------------------------
 def notify_admin(enquiry):
-    subject = "📩 New Travel Enquiry Received"
-    message = f"""
-A new enquiry has been submitted.
+    """
+    Sends enquiry details to admin email using SendGrid.
+    """
 
-Name: {enquiry.name}
-Phone: {enquiry.phone}
-Email: {enquiry.email}
+    sg = sendgrid.SendGridAPIClient(api_key=settings.SENDGRID_API_KEY)
 
-Starting Location: {enquiry.starting_location}
-Destination: {enquiry.planned_destination}
-Travel Date: {enquiry.travel_date}
-Travel Group: {enquiry.travel_group}
+    html_content = f"""
+        <h2>New Travel Enquiry Received</h2>
 
-Nights: {enquiry.nights}
-Adults: {enquiry.adults}
-Children: {enquiry.children}
+        <p><strong>Name:</strong> {enquiry.name}</p>
+        <p><strong>Phone:</strong> {enquiry.phone}</p>
+        <p><strong>Email:</strong> {enquiry.email}</p>
 
-Hotel Category: {enquiry.hotel_category}
-Transportation: {enquiry.transportation}
+        <p><strong>Starting Location:</strong> {enquiry.starting_location}</p>
+        <p><strong>Destination:</strong> {enquiry.planned_destination}</p>
+        <p><strong>Travel Date:</strong> {enquiry.travel_date}</p>
+        <p><strong>Travel Group:</strong> {enquiry.travel_group}</p>
 
-Notes:
-{enquiry.extra_requirement}
+        <p><strong>Nights:</strong> {enquiry.nights}</p>
+        <p><strong>Adults:</strong> {enquiry.adults}</p>
+        <p><strong>Children:</strong> {enquiry.children}</p>
 
------------------------------------
-Dream Travellers • Admin Notification
-"""
+        <p><strong>Hotel Category:</strong> {enquiry.hotel_category}</p>
+        <p><strong>Transportation:</strong> {enquiry.transportation}</p>
+
+        <p><strong>Notes:</strong><br>{enquiry.extra_requirement}</p>
+
+        <hr>
+        <p>Dream Travellers – Admin Notification</p>
+    """
+
+    message = Mail(
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        to_emails="dreamtravellers.ta@gmail.com",
+        subject="📩 New Travel Enquiry Received",
+        html_content=html_content,
+    )
 
     try:
-        send_mail(
-            subject,
-            message,
-            settings.DEFAULT_FROM_EMAIL,
-            ["dreamtravellers.ta@gmail.com"],
-            fail_silently=False
-        )
-        print("Email notification sent.")
+        sg.send(message)
+        print("SendGrid Email Sent Successfully!")
     except Exception as e:
-        print("Email sending failed:", e)
+        print("SendGrid Email Failed:", e)
 
 
 
-# ---------------- SAVE ENQUIRY API ---------------- #
+# -------------------------------------------------------
+#  SAVE ENQUIRY API
+# -------------------------------------------------------
 @csrf_exempt
 def save_enquiry(request):
     if request.method != "POST":
@@ -93,16 +106,17 @@ def save_enquiry(request):
         return JsonResponse({"status": "error", "message": "Invalid JSON"}, status=400)
 
     try:
-        # Convert travel_date safely
+        # Convert travel date safely
         travel_date_raw = data.get("travel_date")
         travel_date = None
+
         if travel_date_raw:
             try:
                 travel_date = datetime.strptime(travel_date_raw, "%Y-%m-%d").date()
             except:
                 travel_date = None
 
-        # Create enquiry
+        # Save enquiry
         enquiry = Enquiry.objects.create(
             name=data.get("name", ""),
             phone=data.get("phone", ""),
@@ -111,15 +125,15 @@ def save_enquiry(request):
             planned_destination=data.get("planned_destination", ""),
             travel_date=travel_date,
             travel_group=data.get("travel_group", ""),
-            nights=data.get("nights", ""),
-            adults=data.get("adults", ""),
-            children=data.get("children", ""),
+            nights=data.get("nights", 0),
+            adults=data.get("adults", 0),
+            children=data.get("children", 0),
             hotel_category=data.get("hotel_category", ""),
             transportation=data.get("transportation", ""),
             extra_requirement=data.get("extra_requirement", "")
         )
 
-        # Safe email sending
+        # Try sending email
         try:
             notify_admin(enquiry)
         except Exception as mail_error:
