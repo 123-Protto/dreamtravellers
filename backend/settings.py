@@ -133,9 +133,8 @@ GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
 # ================================
 # EMAIL (SENDGRID)
 # ================================
-EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
-
+DEFAULT_FROM_EMAIL = "noreply@dreamtravellers.co.in"
 SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY")
+EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
 SENDGRID_SANDBOX_MODE_IN_DEBUG = False
 
-DEFAULT_FROM_EMAIL = "noreply@dreamtravellers.co.in"

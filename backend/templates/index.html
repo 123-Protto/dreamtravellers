@@ -2171,7 +2171,9 @@ async function submitChatbotEnquiry() {
         const data = await res.json().catch(() => ({status:"error"}));
 
         if(res.ok && data.status === "ok"){
-              sendToWhatsAppDirect(); // also send to WhatsApp
+            sendToWhatsApp(formValues); // also send to WhatsApp
+            showSuccessPopup();
+            closeEnquiry();
             const successBubble = appendBotBubbleEmpty();
             await typeIntoBubble(successBubble, "🎉 Your enquiry has been submitted successfully!\nOur team will contact you shortly.");
             
@@ -2213,28 +2215,27 @@ if(submitBtn){
 
     }, 100);
   }
-function sendToWhatsAppDirect() {
-    const BUSINESS = "919745298377"; // Dream Travellers TA WhatsApp number
+async function sendToWhatsApp(formValues) {
+    const BUSINESS_NUMBER = "919745298377";
 
-    const msg =
-`New Enquiry
-Name: ${formValues.name || "-"}
-Phone: ${formValues.phone || "-"}
-Destination: ${formValues.planned_destination || "-"}
-Nights: ${formValues.nights || "-"}
-Adults: ${formValues.adults || "-"}
-Children: ${formValues.children || "-"}
-Date: ${formValues.travel_date || "-"}
-Hotel: ${formValues.hotel_category || "-"}
-Group: ${formValues.travel_group || "-"}
-Notes: ${formValues.extra_requirement || "-"}`;
+    const msg = `
+New Enquiry:
+Name: ${formValues.name}
+Phone: ${formValues.phone}
+Destination: ${formValues.planned_destination}
+Nights: ${formValues.nights}
+Adults: ${formValues.adults}, Children: ${formValues.children}
+Date: ${formValues.travel_date}
+Hotel: ${formValues.hotel_category}
+Travel Group: ${formValues.travel_group}
+Notes: ${formValues.extra_requirement}
+`.trim();
 
-    const url = "https://wa.me/" + BUSINESS + "?text=" + encodeURIComponent(msg);
-
-    // ⭐ Mobile-safe launch:
-    window.location.href = url;
+    window.open(
+        `https://wa.me/${BUSINESS_NUMBER}?text=${encodeURIComponent(msg)}`,
+        "_blank"
+    );
 }
-
 
 
   // Boot / init
