@@ -125,8 +125,14 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
 
 # ================================
-# WHATSAPP CLOUD API SETTINGS
+# EMAIL SETTINGS
 # ================================
-WHATSAPP_NUMBER_ID = os.getenv("WHATSAPP_NUMBER_ID", "")
-WHATSAPP_API_TOKEN = os.getenv("WHATSAPP_API_TOKEN", "")
-ADMIN_WHATSAPP_NUMBER = "919745298377"   # <-- your WhatsApp number
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = "dreamtravellers.ta@gmail.com"
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_APP_PASSWORD")
+
+DEFAULT_FROM_EMAIL = "dreamtravellers.ta@gmail.com"

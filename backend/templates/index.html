@@ -82,6 +82,8 @@ body {
   .title::after{content:'';position:absolute;left:0;bottom:-8px;height:3px;width:0;background:linear-gradient(90deg,var(--accent1),var(--accent2));border-radius:4px;transition:width .35s}
   .card:hover .title::after{width:100%}
 
+  
+
   /* Carousel */
   .carousel{border-radius:12px;overflow:hidden;position:relative;display:flex;flex-direction:column; background: rgba(0,0,0,0.06);}
   /* keep horizontal scroll but hide scrollbar UI (preserve touch scrolling) */
@@ -1230,6 +1232,19 @@ body {
     100% { transform: scale(1); opacity: 1; }
 }
 
+/* Center titles of all cards (About Us, Packages, Contact) */
+.card .title {
+    text-align: center !important;
+    width: 100% !important;
+}
+
+/* Center underline animation */
+.card .title::after {
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+}
+
+
   </style>
 </head>
 <body>
@@ -1255,8 +1270,15 @@ body {
   <section class="card-row">
     <div class="card">
       <h2 class="title"><i class="fa-solid fa-building"></i> About Us</h2>
-      <p>We are group of Travel Enthusiast providing customisable travel package for God's Own Country (Kerala).
-      Your travel will be curated as per your needs.Let us make your travel dreams come true!
+      <p>Who are we : <br>
+
+Today, we are a team of passionate travel advisors, travellers, seasoned local guides, and logistics experts, all united by a shared love of exploration. 
+
+Our process is personal. We spend time getting to know your style, crafting 100% custom itineraries that reflect your pace, preferences, and personal bucket list."<br>
+
+Our core values:<br>
+
+Integrity, Sustainability, Personal Service, Local Expertise, Safety, or Accessibility.
       </p>
     </div>
 
@@ -1416,7 +1438,7 @@ body {
           <button aria-label="Close" onclick="closeEnquiry()" style="background:transparent;border:none;color:#fff;font-size:20px;cursor:pointer">✖</button>
         </div>
 
-        <div id="enquiry-desc" style="font-size:13px;color:var(--muted);margin-bottom:12px">Fill traveler & trip details. The trip summary is shown on the right.</div>
+        <div id="enquiry-desc" style="font-size:13px;color:var(--muted);margin-bottom:12px">"Please share us your requirement, we will curate your travel plan accordingly"</div>
 
         <form id="travelFormHtml" onsubmit="return false;">
           {% csrf_token %}

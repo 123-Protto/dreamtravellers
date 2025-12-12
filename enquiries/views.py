@@ -3,6 +3,8 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Enquiry
 from datetime import datetime
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 # ---------------- CHATBOT REPLY API ---------------- #
@@ -35,7 +37,53 @@ def chat_reply(request):
 
 
 
-# ---------------- SAVE ENQUIRY API ---------------- #
+# ---------------- ADMIN EMAIL NOTIFICATION ---------------- #
+def notify_admin(enquiry):
+    """
+    Sends an email to admin when a new enquiry is created.
+    """
+
+    subject = "📩 New Travel Enquiry Received"
+    message = f"""
+A new enquiry has been submitted.
+
+Name: {enquiry.name}
+Phone: {enquiry.phone}
+Email: {enquiry.email}
+
+Starting Location: {enquiry.starting_location}
+Destination: {enquiry.planned_destination}
+Travel Date: {enquiry.travel_date}
+Travel Group: {enquiry.travel_group}
+
+Nights: {enquiry.nights}
+Adults: {enquiry.adults}
+Children: {enquiry.children}
+
+Hotel Category: {enquiry.hotel_category}
+Transportation: {enquiry.transportation}
+
+Notes:
+{enquiry.extra_requirement}
+
+-----------------------------------
+Dream Travellers • Admin Notification
+"""
+
+    try:
+        send_mail(
+            subject,
+            message,
+            settings.DEFAULT_FROM_EMAIL,
+            ["dreamtravellers.ta@gmail.com"],   # Your admin email
+            fail_silently=False
+        )
+        print("Email notification sent.")
+    except Exception as e:
+        print("Email sending failed:", e)
+
+
+
 # ---------------- SAVE ENQUIRY API ---------------- #
 @csrf_exempt
 def save_enquiry(request):
@@ -66,17 +114,19 @@ def save_enquiry(request):
             travel_date=travel_date,
             travel_group=data.get("travel_group", ""),
 
-            nights=data.get("nights", ""),      # ✅ REMOVE int()
-            adults=data.get("adults", ""),      # ✅ STORE AS TEXT
-            children=data.get("children", ""),  # ✅ STORE AS TEXT
+            nights=data.get("nights", ""),      
+            adults=data.get("adults", ""),
+            children=data.get("children", ""),
 
             hotel_category=data.get("hotel_category", ""),
             transportation=data.get("transportation", ""),
             extra_requirement=data.get("extra_requirement", "")
         )
 
+        # 🔔 Notify admin by email
+        notify_admin(enquiry)
+
         return JsonResponse({"status": "ok", "id": enquiry.id})
 
     except Exception as e:
         return JsonResponse({"status": "error", "message": str(e)}, status=500)
-
