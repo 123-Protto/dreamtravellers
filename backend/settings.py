@@ -21,6 +21,12 @@ ALLOWED_HOSTS = [
     "dreamtravellers.co.in",
     "www.dreamtravellers.co.in",
 ]
+CSRF_TRUSTED_ORIGINS = [
+    "https://dreamtravellers.co.in",
+    "https://www.dreamtravellers.co.in",
+    "https://dreamtravellers.onrender.com",
+]
+
 
 
 # ================================

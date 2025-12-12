@@ -77,14 +77,47 @@ body {
   /* Cards */
   .card-row{width:100%;display:flex;justify-content:center;gap:34px;flex-wrap:wrap;margin-top:10px;margin-bottom:100px;padding:20px}
   .card{width:340px;background:rgba(255,255,255,0.14);backdrop-filter:blur(8px);border-radius:18px;padding:18px;border:1px solid rgba(255,255,255,0.08);transition:0.28s;display:flex;flex-direction:column}
+  /* Center titles of all cards (About Us, Packages, Contact) */
+.card .title {
+    text-align: center !important;
+    width: 100% !important;
+}
+
+/* Center underline animation */
+.card .title::after {
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+}
+
   .card:hover{transform:translateY(-6px) scale(1.02);background:rgba(255,255,255,0.18)}
   .title{position:relative;margin-bottom:12px;font-size:18px;font-weight:600}
   .title::after{content:'';position:absolute;left:0;bottom:-8px;height:3px;width:0;background:linear-gradient(90deg,var(--accent1),var(--accent2));border-radius:4px;transition:width .35s}
   .card:hover .title::after{width:100%}
 
-  
+.sub-title {
+    font-size: 17px;
+    font-weight: 600;
+    margin-top: 16px;
+    margin-bottom: 12px;
+    text-align: center; /* same alignment style */
+    position: relative;
+    color: rgba(255,255,255,0.95);
+}
 
-  /* Carousel */
+/* Underline like “About Us” card title */
+.sub-title::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -8px;
+    height: 3px;
+    width: 50px;
+    background: linear-gradient(90deg, var(--accent1), var(--accent2));
+    border-radius: 4px;
+}
+
+/* Carousel */
   .carousel{border-radius:12px;overflow:hidden;position:relative;display:flex;flex-direction:column; background: rgba(0,0,0,0.06);}
   /* keep horizontal scroll but hide scrollbar UI (preserve touch scrolling) */
   .carousel-track{display:flex;transition:transform .6s ease;scroll-behavior:smooth;overflow-x:auto;-webkit-overflow-scrolling:touch; -ms-overflow-style: none; scrollbar-width: none;}
@@ -1270,16 +1303,16 @@ body {
   <section class="card-row">
     <div class="card">
       <h2 class="title"><i class="fa-solid fa-building"></i> About Us</h2>
-      <p>Who are we : <br>
+     <p>
+Today, we are a team of passionate travel advisors, travellers, seasoned local guides, and logistics experts, all united by a shared love of exploration.<br><br>
+Our process is personal. We spend time getting to know your style, crafting 100% custom itineraries that reflect your pace, preferences, and personal bucket list.
+</p>
 
-Today, we are a team of passionate travel advisors, travellers, seasoned local guides, and logistics experts, all united by a shared love of exploration. 
+<h3 class="sub-title"><i class="fa-solid fa-star"></i>Our Core Values</h3>
+<p>
+Integrity, Sustainability, Personal Service, Local Expertise, Safety, Accessibility.
+</p>
 
-Our process is personal. We spend time getting to know your style, crafting 100% custom itineraries that reflect your pace, preferences, and personal bucket list."<br>
-
-Our core values:<br>
-
-Integrity, Sustainability, Personal Service, Local Expertise, Safety, or Accessibility.
-      </p>
     </div>
 
     <div class="card">
@@ -2339,14 +2372,16 @@ let adultsValue = document.getElementById("Calcadults").value.trim();
     }
 
     try{
-      const res = await fetch("/api/save-enquiry/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": CSRFTOKEN
-        },
-        body: JSON.stringify(payload)
-      });
+           const res = await fetch(API_BASE + "/api/save-enquiry/", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "X-CSRFToken": CSRFTOKEN
+  },
+  credentials: "same-origin",  // <<< ADD THIS TOO
+  body: JSON.stringify(payload)
+});
+
       const data = await res.json().catch(()=>({status:"error", message:"Invalid JSON response"}));
       if(res.ok && data.status === "ok"){
         showSuccessPopup(); 
