@@ -2157,9 +2157,13 @@ const idMap = {
 
 `;
 async function submitChatbotEnquiry() {
+
+    // 1️⃣ OPEN WHATSAPP FIRST — must happen BEFORE await, or mobile blocks it
+    sendToWhatsApp(formValues);
+
+    // 2️⃣ THEN save enquiry to backend (async – safe)
     try {
-        
-          const res = await fetch(API_BASE + "/api/save-enquiry/", {
+        const res = await fetch(API_BASE + "/api/save-enquiry/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -2168,23 +2172,24 @@ async function submitChatbotEnquiry() {
             body: JSON.stringify(formValues)
         });
 
-        const data = await res.json().catch(() => ({status:"error"}));
+        const data = await res.json().catch(() => ({status: "error"}));
 
-        if(res.ok && data.status === "ok"){
-            sendToWhatsApp(formValues); // also send to WhatsApp
+        if (res.ok && data.status === "ok") {
             showSuccessPopup();
             closeEnquiry();
-            const successBubble = appendBotBubbleEmpty();
-            await typeIntoBubble(successBubble, "🎉 Your enquiry has been submitted successfully!\nOur team will contact you shortly.");
-            
-            // Reset chatbot for next enquiry
-            Object.keys(formValues).forEach(k => formValues[k] = "");
 
-            return;
+            const successBubble = appendBotBubbleEmpty();
+            await typeIntoBubble(successBubble, 
+              "🎉 Your enquiry has been submitted successfully!\nOur team will contact you shortly."
+            );
+
+            // reset chatbot form values
+            Object.keys(formValues).forEach(k => formValues[k] = "");
         } else {
             alert("Error saving enquiry: " + (data.message || "Unknown error"));
         }
-    } catch(err){
+
+    } catch (err) {
         alert("Network error: " + err.message);
     }
 }
