@@ -2171,7 +2171,7 @@ async function submitChatbotEnquiry() {
         const data = await res.json().catch(() => ({status:"error"}));
 
         if(res.ok && data.status === "ok"){
-            sendToWhatsApp(); // also send to WhatsApp
+              sendToWhatsAppDirect(); // also send to WhatsApp
             const successBubble = appendBotBubbleEmpty();
             await typeIntoBubble(successBubble, "🎉 Your enquiry has been submitted successfully!\nOur team will contact you shortly.");
             
@@ -2213,29 +2213,28 @@ if(submitBtn){
 
     }, 100);
   }
-async function sendToWhatsApp() {
-    try {
-        const BUSINESS_NUMBER = "919745298377";
-        const msg = [
-            "New Enquiry:",
-            `Name: ${formValues.name || ""}`,
-            `Phone: ${formValues.phone || ""}`,
-            `Nights: ${formValues.nights || ""}`,
-            `Persons: Adults ${formValues.adults || ""}, Children ${formValues.children || ""}`,
-            `Date: ${formValues.travel_date || "Not specified"}`,
-            `Hotel: ${formValues.hotel_category || ""}`,
-            `Travel Group: ${formValues.travel_group || ""}`,
-            `Notes: ${formValues.extra_requirement || ""}`
-        ].join("\n");
+function sendToWhatsAppDirect() {
+    const BUSINESS = "919745298377";
 
-        window.open(
-            `https://wa.me/${BUSINESS_NUMBER}?text=${encodeURIComponent(msg)}`,
-            "_blank"
-        );
-    } catch (err) {
-        console.error("WhatsApp send error:", err);
-    }
+    const msg =
+`New Enquiry
+Name: ${formValues.name || "-"}
+Phone: ${formValues.phone || "-"}
+Destination: ${formValues.planned_destination || "-"}
+Nights: ${formValues.nights || "-"}
+Adults: ${formValues.adults || "-"}
+Children: ${formValues.children || "-"}
+Date: ${formValues.travel_date || "-"}
+Hotel: ${formValues.hotel_category || "-"}
+Group: ${formValues.travel_group || "-"}
+Notes: ${formValues.extra_requirement || "-"}`;
+
+    const url = "https://wa.me/" + BUSINESS + "?text=" + encodeURIComponent(msg);
+
+    // ⭐ Mobile-safe launch:
+    window.location.href = url;
 }
+
 
 
   // Boot / init
