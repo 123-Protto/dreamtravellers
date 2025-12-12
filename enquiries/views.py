@@ -39,10 +39,6 @@ def chat_reply(request):
 
 # ---------------- ADMIN EMAIL NOTIFICATION ---------------- #
 def notify_admin(enquiry):
-    """
-    Sends an email to admin when a new enquiry is created.
-    """
-
     subject = "📩 New Travel Enquiry Received"
     message = f"""
 A new enquiry has been submitted.
@@ -75,7 +71,7 @@ Dream Travellers • Admin Notification
             subject,
             message,
             settings.DEFAULT_FROM_EMAIL,
-            ["dreamtravellers.ta@gmail.com"],   # Your admin email
+            ["dreamtravellers.ta@gmail.com"],
             fail_silently=False
         )
         print("Email notification sent.")
@@ -90,13 +86,14 @@ def save_enquiry(request):
     if request.method != "POST":
         return JsonResponse({"status": "error", "message": "Invalid method"}, status=400)
 
+    # Parse JSON
     try:
         data = json.loads(request.body.decode("utf-8"))
     except:
         return JsonResponse({"status": "error", "message": "Invalid JSON"}, status=400)
 
     try:
-        # Convert date safely
+        # Convert travel_date safely
         travel_date_raw = data.get("travel_date")
         travel_date = None
         if travel_date_raw:
@@ -105,6 +102,7 @@ def save_enquiry(request):
             except:
                 travel_date = None
 
+        # Create enquiry
         enquiry = Enquiry.objects.create(
             name=data.get("name", ""),
             phone=data.get("phone", ""),
@@ -113,18 +111,19 @@ def save_enquiry(request):
             planned_destination=data.get("planned_destination", ""),
             travel_date=travel_date,
             travel_group=data.get("travel_group", ""),
-
-            nights=data.get("nights", ""),      
+            nights=data.get("nights", ""),
             adults=data.get("adults", ""),
             children=data.get("children", ""),
-
             hotel_category=data.get("hotel_category", ""),
             transportation=data.get("transportation", ""),
             extra_requirement=data.get("extra_requirement", "")
         )
 
-        # 🔔 Notify admin by email
-        notify_admin(enquiry)
+        # Safe email sending
+        try:
+            notify_admin(enquiry)
+        except Exception as mail_error:
+            print("Email sending failed:", mail_error)
 
         return JsonResponse({"status": "ok", "id": enquiry.id})
 
